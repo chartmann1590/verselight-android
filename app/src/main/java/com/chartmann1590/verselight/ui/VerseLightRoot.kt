@@ -142,7 +142,7 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
             }
         },
     ) { padding ->
-        AnimatedContent(tab, label = "section") { selected ->
+        AnimatedContent(tab, modifier = Modifier.statusBarsPadding(), label = "section") { selected ->
             when (selected) {
                 Tab.TODAY -> TodayScreen(vm.verse, liked, comments.size, padding, onLike = { requireAuth(vm::toggleLike) }, onShare = {
                     val text = "“${vm.verse.text}”\n— ${vm.verse.reference} (${vm.verse.translation})\n\nShared from VerseLight"
