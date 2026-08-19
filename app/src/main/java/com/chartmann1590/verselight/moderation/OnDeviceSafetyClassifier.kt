@@ -76,18 +76,26 @@ class OnDeviceSafetyClassifier(@Suppress("UNUSED_PARAMETER") context: Context? =
         return 1.0 / (1.0 + exp(-logit))
     }
 
-    internal fun normalize(input: String): String = Normalizer.normalize(input, Normalizer.Form.NFKC)
-        .lowercase()
-        .replace(Regex("[._* -]+(?=[a-z])"), " ")
-        .replace('0', 'o').replace('1', 'i').replace('3', 'e').replace('4', 'a').replace('5', 's').replace('7', 't')
-        .replace(Regex("(.)\\1{2,}"), "$1")
-        .trim()
+    internal fun normalize(input: String): String {
+        var result = Normalizer.normalize(input, Normalizer.Form.NFKC)
+            .lowercase()
+            .replace('0', 'o').replace('1', 'i').replace('3', 'e').replace('4', 'a').replace('5', 's').replace('7', 't')
+        OBFUSCATION_TERMS.forEach { term ->
+            val separatedLetters = term.toCharArray().joinToString("[\\W_]*") { Regex.escape(it.toString()) }
+            result = result.replace(Regex("\\b$separatedLetters\\b"), term)
+        }
+        return result
+            .replace(Regex("[._* -]+(?=[a-z])"), " ")
+            .replace(Regex("(.)\\1{2,}"), "$1")
+            .trim()
+    }
 
     companion object {
         private val THREAT_WEIGHTS = mapOf("kill" to 2.8, "murder" to 3.0, "hurt" to 1.8, "attack" to 2.0, "shoot" to 2.7, "stab" to 2.8, "die" to 1.6, "i will kill" to 3.8, "you should die" to 4.2, "find you" to 2.1)
         private val HATE_WEIGHTS = mapOf("subhuman" to 3.5, "vermin" to 2.7, "inferior" to 1.7, "race" to 0.5, "ethnicity" to 0.4, "all of them" to 1.2, "should be banned" to 1.7)
         private val HARASSMENT_WEIGHTS = mapOf("idiot" to 2.1, "moron" to 2.2, "loser" to 1.8, "worthless" to 2.6, "disgusting" to 1.4, "shut up" to 2.0, "hate you" to 2.5, "nobody wants you" to 3.1)
         private val SEXUAL_WEIGHTS = mapOf("rape" to 3.8, "molest" to 3.8, "child porn" to 5.0, "sexual abuse" to 3.0, "forced sex" to 4.0)
-        private val PROFANITY_WEIGHTS = mapOf("fuck" to 3.8, "fucking" to 3.8, "motherfucker" to 4.3, "shit" to 2.7, "bitch" to 3.0, "cunt" to 4.3, "asshole" to 3.7)
+        private val PROFANITY_WEIGHTS = mapOf("fuck" to 4.2, "fucking" to 4.3, "motherfucker" to 5.0, "shit" to 4.0, "bitch" to 4.0, "cunt" to 5.0, "asshole" to 4.5)
+        private val OBFUSCATION_TERMS = setOf("fucking", "motherfucker", "asshole", "fuck", "shit", "bitch", "cunt", "kill", "rape")
     }
 }
