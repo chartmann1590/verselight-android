@@ -126,6 +126,9 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
     val snackbars = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) { vm.messages.collectLatest { snackbars.showSnackbar(it.text) } }
+    LaunchedEffect(user?.uid) {
+        if (user != null) authOpen = false
+    }
 
     fun requireAuth(action: () -> Unit) {
         if (user == null) authOpen = true else action()
