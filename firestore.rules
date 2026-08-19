@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function owner(uid) { return signedIn() && request.auth.uid == uid; }
+    function validName(name) { return name is string && name.size() >= 1 && name.size() <= 40; }
+
+    match /users/{uid} {
+      allow create, read, update, delete: if owner(uid);
+      match /{privateCollection}/{document=**} {
+        allow read, write: if owner(uid);
+      }
+    }
+
+    match /publicProfiles/{uid} {
+      allow read: if true;
+      allow create, update: if owner(uid)
+        && request.resource.data.keys().hasOnly(['uid', 'displayName', 'avatarUrl'])
+        && request.resource.data.uid == uid
+        && validName(request.resource.data.displayName)
+        && (request.resource.data.avatarUrl == null || request.resource.data.avatarUrl is string);
+      allow delete: if owner(uid);
+    }
+
+    match /dailyVerses/{dayKey} {
+      allow read: if true;
+      allow write: if false;
+
+      match /comments/{commentId} {
+        allow read: if resource.data.moderationStatus in ['visible', 'restored'];
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['dayKey', 'authorUid', 'authorName', 'authorAvatarUrl', 'body', 'createdAt', 'editedAt', 'moderationStatus'])
+          && request.resource.data.dayKey == dayKey
+          && request.resource.data.authorUid == request.auth.uid
+          && validName(request.resource.data.authorName)
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 1
+          && request.resource.data.body.size() <= 500
+          && request.resource.data.moderationStatus == 'visible'
+          && request.resource.data.createdAt == request.time;
+        allow update: if signedIn()
+          && resource.data.authorUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['body', 'editedAt'])
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 1
+          && request.resource.data.body.size() <= 500
+          && request.resource.data.editedAt == request.time;
+        allow delete: if signedIn() && resource.data.authorUid == request.auth.uid;
+      }
+    }
+  }
+}
+

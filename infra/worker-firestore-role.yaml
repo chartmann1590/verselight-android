@@ -1,0 +1,8 @@
+title: VerseLight Worker Comment Moderator
+description: Read, moderate, and delete public comments through the least-privilege moderation Worker.
+stage: GA
+includedPermissions:
+  - datastore.entities.get
+  - datastore.entities.list
+  - datastore.entities.update
+  - datastore.entities.delete

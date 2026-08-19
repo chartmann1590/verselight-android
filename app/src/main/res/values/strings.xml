@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VerseLight</string>
+    <string name="google_web_client_id">CONFIGURE_IN_FIREBASE_CONSOLE.apps.googleusercontent.com</string>
+    <string name="notification_channel_name">Daily light</string>
+    <string name="notification_channel_description">Your optional daily verse reminder</string>
+</resources>
+
