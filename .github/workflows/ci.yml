@@ -11,6 +11,8 @@ jobs:
         with: { distribution: temurin, java-version: '17', cache: gradle }
       - uses: gradle/actions/setup-gradle@v4
       - run: ./gradlew :app:lintDebug :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest
+      - name: Verify 16 KB page-size compatibility
+        run: ./scripts/verify-16kb.sh app/build/outputs/apk/debug/app-debug.apk
       - uses: actions/upload-artifact@v4
         with:
           name: verselight-debug-apks
