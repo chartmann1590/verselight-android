@@ -4,23 +4,47 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Support &amp; Account Deletion · VerseLight</title>
+  <meta name="description" content="VerseLight support, privacy controls, ads consent, and account deletion.">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="icon.svg">
 </head>
 <body>
   <div class="wrap">
-    <nav><a class="brand" href="./">VERSE<span>Light</span></a><div class="navlinks"><a href="./">Home</a><a href="privacy.html">Privacy</a></div></nav>
+    <nav><a class="brand" href="./">VERSE<span>Light</span></a><div class="navlinks"><a href="./">Home</a><a href="privacy.html">Privacy</a><a href="delete-account.html">Delete Account</a></div></nav>
     <main class="legal">
       <p class="eyebrow">We’re here to help</p>
       <h1>Support &amp; account deletion</h1>
+
+      <h2>Privacy &amp; ads consent</h2>
+      <p>VerseLight <strong>contains ads</strong> (banner + interstitial via Google AdMob). In the EEA/UK/Switzerland, personalized ads require consent via Google’s UMP/TCF form shown on first launch.</p>
+      <ul>
+        <li><strong>Change ad consent:</strong> Open VerseLight → <strong>Profile → Ads privacy options</strong> to re-open the consent form. Or use Android <strong>Settings → Privacy → Ads → Delete/Reset Advertising ID</strong>.</li>
+        <li><strong>What we show:</strong> Adaptive banner at bottom; interstitial only <em>between</em> navigation/actions (max once per ~2 min, never on launch/exit or while typing).</li>
+        <li><strong>More:</strong> <a href="privacy.html#advertising">Advertising details in Privacy Policy</a> · <a href="/app-ads.txt">app-ads.txt</a> (pub-8382831211800454) · <a href="https://policies.google.com/technologies/ads">How Google uses ad data</a></li>
+      </ul>
+
       <h2>Delete your account</h2>
-      <p>Use the dedicated <a href="delete-account.html">VerseLight account deletion page</a> to delete in the app or submit a private request without reinstalling it.</p>
+      <p>Use the dedicated <a href="delete-account.html">VerseLight account deletion page</a> to delete <strong>in the app</strong> (Profile → Delete my account and private data) or submit a private request <strong>without reinstalling</strong>. Verified web requests are completed within 30 days. This satisfies Google Play’s deletion requirement (in-app + web).</p>
+
       <h2>Troubleshooting</h2>
-      <p>For sign-in problems, verify that Google Play services is current, check your connection, and try again. Password users can select “Reset password” in the sign-in dialog. For notification issues, allow notifications in Android Settings and remove battery restrictions for VerseLight.</p>
+      <h3 style="margin:12px 0 6px">Sign-in</h3>
+      <p>Ensure Google Play services is current, check connection, and try again. Password users can use “Reset password” in the sign-in dialog.</p>
+      <h3 style="margin:12px 0 6px">Notifications</h3>
+      <p>Allow notifications in Android Settings → Apps → VerseLight → Notifications and remove battery restrictions.</p>
+      <h3 style="margin:12px 0 6px">Ads not showing / consent form not appearing</h3>
+      <p>Ads need Play services &amp; internet; in EEA, accept/decline the UMP prompt on first launch. Re-open via <strong>Profile → Ads privacy options</strong>. If you deleted your Advertising ID, only non-personalized ads may appear.</p>
+      <h3 style="margin:12px 0 6px">Translation model</h3>
+      <p>Language models are ~30 MB, downloaded once via ML Kit and stored on-device.</p>
+
+      <h2>Data we process (Play Data Safety)</h2>
+      <p>We disclose in Play Console: Email, Name, Avatar, App activity (likes/comments), Diagnostics (crashes/performance), Device IDs (Advertising ID). Purposes: App functionality, Analytics, <strong>Advertising</strong>. Encrypted in transit: Yes. Deletion: Yes (link above).</p>
+
       <h2>Contact</h2>
-      <p>Email <a href="mailto:charles.h.hartmann1@gmail.com">charles.h.hartmann1@gmail.com</a>. Never post account or sign-in information in a public GitHub issue.</p>
+      <p>For support, bug reports, and privacy inquiries, please <a href="https://github.com/chartmann1590/verselight-android/issues/new">open an issue on GitHub</a>. Do not include passwords or sensitive personal information — we will never ask for them.</p>
+      <p>For private account-deletion requests without GitHub, use the <a href="delete-account.html">account deletion page</a> instructions. Response for deletion: verification + completion within 30 days.</p>
+
       <h2>Open-source and content</h2>
-      <p>The app source is maintained on GitHub. Scripture is from the public-domain <a href="https://ebible.org/details.php?id=engwebp">World English Bible</a>.</p>
+      <p>The app source is maintained at <a href="https://github.com/chartmann1590/verselight-android">github.com/chartmann1590/verselight-android</a>. Scripture is from the public-domain <a href="https://ebible.org/details.php?id=engwebp">World English Bible</a>. Hosting at <a href="https://verselight-daily-2026.web.app">verselight-daily-2026.web.app</a>.</p>
     </main>
   </div>
 </body>

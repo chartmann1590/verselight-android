@@ -1,69 +1,64 @@
-# VerseLight
+# ☀ VerseLight — a little light, every day
 
-VerseLight is a native Android daily Bible verse app with a calm, biblical design, public community reflections, a private activity journey, on-device comment moderation, Firebase authentication/data, Cloudflare reporting, and a public Firebase Hosting website.
+**One shared Bible verse, a gracious community, and your private spiritual journey — on Android.**
 
-## What is included
+VerseLight gives everyone the same beautiful verse each day from the public-domain **World English Bible**, space to share respectful reflections, and a private record of the words you carry. Free to use, supported by unobtrusive ads.
 
-- Kotlin, Jetpack Compose, Material 3, Android 8+ (`minSdk 26`)
-- One deterministic UTC verse each day from the public-domain World English Bible
-- Guest reading and Android sharing
-- Firebase email/password and Google authentication
-- Three-step first-run onboarding with account, Google, and explicit guest paths
-- Persistent language selection with downloadable ML Kit on-device translation models
-- Private likes, share history, preferences, and activity history in Firestore
-- Public comments with editable public display name and optional Google avatar
-- Embedded on-device safety classification plus Gemini Nano/AICore when supported by the device
-- A second Worker-side safety gate; clients cannot write new comments directly to Firestore
-- Firebase Crashlytics and Performance Monitoring for stability and performance diagnostics
-- Cloudflare Worker, D1 moderation queue, distinct-reporter threshold hiding, and protected moderator routes
-- Opt-in local daily notification
-- Responsive landing, privacy, community-guidelines, support, and account-deletion pages
-- Google Play account-deletion URL: https://verselight-daily-2026.web.app/delete-account
+- **Get it on Google Play** — *Coming soon* (public beta link will appear at [verselight-daily-2026.web.app](https://verselight-daily-2026.web.app))
+- **Website:** https://verselight-daily-2026.web.app
 
-## Local Android setup
+---
 
-1. Use JDK 17 and Android SDK 36.
-2. Register `com.chartmann1590.verselight` in Firebase and place `google-services.json` in `app/`.
-3. Enable Email/Password and Google providers in Firebase Authentication. Add debug and release SHA-1/SHA-256 fingerprints.
-4. Run `./gradlew :app:assembleDebug :app:testDebugUnitTest`.
-5. Install with `adb install -r app/build/outputs/apk/debug/app-debug.apk`.
+## What you'll find
 
-The checked-in default Worker URL points to the VerseLight production Worker. Override it locally with `-PREPORTS_BASE_URL=https://...` if needed.
+**☀ One shared verse every day** — Everyone receives the same thoughtfully chosen passage at midnight UTC. Works offline, even without an account.
 
-## Firebase
+**♡ A gracious community** — Share reflections beneath the daily verse. Comments are checked on-device before posting, verified again on our server, and can be reported for human review. Three independent reports temporarily hide a comment.
 
-The live project is `verselight-daily-2026`. Deploy rules and indexes with:
+**✦ Your private journey** — Likes, shares, and your history stay private to your account. Revisit verses you saved in *My Journey*.
 
-```text
-firebase deploy --only firestore --project verselight-daily-2026
-```
+**🌍 Your language, on your device** — Choose from 60+ languages. Translation models download once (~30 MB) and translate entirely on-device via Google ML Kit — no cloud translation.
 
-`app/google-services.json`, signing keys, and service-account credentials are intentionally ignored.
+**🔔 Daily reminder** — Optional local notification at the hour you choose. No email spam.
 
-## Cloudflare Worker
+**🛡 Safe & calm** — No feed, no followers, no DMs. Just one verse and sincere conversation.
 
-The Worker lives in `worker/` and uses a D1 database plus a rate-limit binding. It authenticates comment authors with Firebase ID tokens, repeats the deterministic safety check, and is the only production path that can create comments. Required secrets are `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, and an emergency `ADMIN_TOKEN`.
+**📢 Contains ads** — Banner and occasional interstitial ads via Google AdMob support the app. Personalized ads require your consent (EEA/UK/CH via Google UMP). You can change this anytime in **Profile → Ads privacy options** or Android **Settings → Privacy → Ads**.
 
-```text
-cd worker
-npm install
-npm run typecheck
-npm test
-npm run deploy
-```
+---
 
-The Firebase service account uses the standard Datastore User role. Moderator access additionally requires a verified Firebase ID token for `charles.h.hartmann1@gmail.com`; the emergency token is break-glass access and is not used by the browser dashboard.
+## Privacy
 
-## Website
+We never sell your data. Public: your comment text, display name, and avatar. Private: email, likes, share history, reminders, and reporter identity.
 
-Static public files are in `website/` and deploy to `https://verselight-daily-2026.web.app` with `firebase deploy --only hosting`. The Charles-only moderator dashboard is at `https://verselight-daily-2026.web.app/admin`.
+- **Privacy Policy:** https://verselight-daily-2026.web.app/privacy.html
+- **Community Guidelines:** https://verselight-daily-2026.web.app/community.html
+- **Delete your account:** In the app **Profile → Delete my account and private data**, or on the web at https://verselight-daily-2026.web.app/delete-account.html (verification + completion within 30 days — satisfies Google Play deletion requirements).
 
-## Privacy and content
+Learn how advertising works: [Privacy → Advertising](https://verselight-daily-2026.web.app/privacy.html#advertising) · [app-ads.txt](https://verselight-daily-2026.web.app/app-ads.txt) · [How Google uses ad data](https://policies.google.com/technologies/ads)
 
-The World English Bible text is public domain; the translation name is a trademark of eBible.org and the text is reproduced without modification. See [eBible.org](https://ebible.org/details.php?id=engwebp).
+---
 
-Comment drafts are moderated locally before any network request. Allowed drafts are checked again by the Worker before Firestore storage. Posted comments and public profile name/avatar are public. Account email, likes, shares, reporter identity, and activity history are private.
+## Support
 
-## License
+Have a question, idea, or issue?
 
-App and infrastructure source are licensed under Apache-2.0. Scripture text remains public domain under its upstream terms.
+**Please [open an issue on GitHub](https://github.com/chartmann1590/verselight-android/issues/new)** — choose *Bug report* or *Feature request*. We triage publicly.
+
+> Please don't post passwords, recovery codes, or sensitive personal information in an issue.
+
+For private account-deletion help without the app, follow the link above. About the text: World English Bible is public domain — see [eBible.org](https://ebible.org/details.php?id=engwebp).
+
+---
+
+## For the curious
+
+VerseLight is native Android (Kotlin + Jetpack Compose, Material 3) with Firebase Authentication & Firestore, Cloudflare Workers for moderation, and on-device safety + translation. It's open source under **Apache-2.0** — see [LICENSE](LICENSE). Scripture text remains public domain under its upstream terms.
+
+Developer notes, moderation model card, and build instructions are in [`docs/`](docs/) and commit history.
+
+---
+
+*VerseLight is not a crisis service. If someone is in immediate danger, contact local emergency services. In the US & Canada, call or text **988**.*
+
+A little light, every day. — *Charles Hartmann*

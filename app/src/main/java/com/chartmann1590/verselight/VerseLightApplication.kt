@@ -1,6 +1,7 @@
 package com.chartmann1590.verselight
 
 import android.app.Application
+import com.chartmann1590.verselight.ads.AdMobManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
@@ -22,5 +23,6 @@ class VerseLightApplication : Application() {
         container = AppContainer(this)
         appScope.launch { container.safety.prepareGeminiNano() }
         ReminderScheduler.createChannel(this)
+        AdMobManager.initialize(this)
     }
 }

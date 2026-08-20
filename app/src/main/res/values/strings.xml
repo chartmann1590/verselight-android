@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">VerseLight</string>
+    <string name="admob_app_id">ca-app-pub-8382831211800454~6794953101</string>
+    <string name="admob_banner_id">ca-app-pub-8382831211800454/9856230712</string>
+    <string name="admob_interstitial_id">ca-app-pub-8382831211800454/9062023796</string>
     <string name="google_web_client_id">617118179680-c5g6v1lnu6fr7ovpn86ceib6s6ut61n8.apps.googleusercontent.com</string>
     <string name="notification_channel_name">Daily light</string>
     <string name="notification_channel_description">Your optional daily verse reminder</string>

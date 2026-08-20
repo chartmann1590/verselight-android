@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Privacy Policy · VerseLight</title>
+  <meta name="description" content="VerseLight Privacy Policy — how we collect, use, and share data, including Google AdMob advertising, GDPR consent, and account deletion.">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="icon.svg">
 </head>
@@ -11,33 +12,100 @@
   <div class="wrap">
     <nav>
       <a class="brand" href="./">VERSE<span>Light</span></a>
-      <div class="navlinks"><a href="./">Home</a><a href="support.html">Support</a></div>
+      <div class="navlinks"><a href="./">Home</a><a href="support.html">Support</a><a href="delete-account.html">Delete Account</a></div>
     </nav>
     <main class="legal">
-      <p class="eyebrow">Effective August 19, 2026</p>
+      <p class="eyebrow">Effective August 20, 2026 · Version 2.0</p>
       <h1>Privacy Policy</h1>
-      <p class="note">VerseLight is designed so your email, likes, share history, reminder preference, and private activity history are not visible to other users.</p>
+      <p class="note">VerseLight is designed so your email, likes, share history, reminder preferences, and private activity history are <strong>never visible to other users</strong>. This policy explains what we collect, why, and your controls — including advertising with Google AdMob.</p>
+
+      <h2>Controller &amp; contact</h2>
+      <p>VerseLight is published by <strong>Charles Hartmann</strong>. For privacy requests or deletion help contact <a href="mailto:charles.h.hartmann1@gmail.com">charles.h.hartmann1@gmail.com</a> or via the <a href="support.html">support page</a>. This is also the contact for EU/UK GDPR inquiries.</p>
+
+      <h2>Summary</h2>
+      <ul>
+        <li><strong>No sale of data.</strong> We never sell personal information.</li>
+        <li><strong>Ads:</strong> The app <strong>contains ads</strong> via Google AdMob (banner + interstitial). See <a href="#advertising">Advertising</a> below.</li>
+        <li><strong>Consent:</strong> Personalized ads require your consent (EEA/UK/CH via Google UMP/TCF). You can change it anytime in the app: <strong>Profile → Ads privacy options</strong>.</li>
+        <li><strong>Your data:</strong> Counts toward Data Safety: email, name, avatar, app activity (likes/comments), diagnostics, device IDs (Advertising ID).</li>
+      </ul>
+
       <h2>Information we collect</h2>
-      <p>If you create an account, Firebase Authentication processes your email address, Google account identifier when applicable, display name, avatar, and authentication metadata. VerseLight stores your chosen public display name and avatar, private likes and activity history, public comments, reports you submit, and basic operational timestamps.</p>
-      <h2>How information is used</h2>
-      <p>We use this information to authenticate you, synchronize your private journey, show your public comments, prevent abuse, process reports, operate reminders, secure the service, and delete data at your request. We do not sell personal information or use it for advertising.</p>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin:12px 0">
+        <tr style="border-bottom:1px solid #e5e7eb;text-align:left"><th style="padding:8px">Category</th><th style="padding:8px">Examples</th><th style="padding:8px">Source</th></tr>
+        <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:8px">Account</td><td style="padding:8px">Email, Google ID (if used), display name, avatar URL, auth metadata</td><td style="padding:8px">You / Firebase Auth</td></tr>
+        <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:8px">App activity</td><td style="padding:8px">Likes, shares, comments, reports, reminder hour, language choice</td><td style="padding:8px">You</td></tr>
+        <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:8px">Public content</td><td style="padding:8px">Comment text, display name + avatar (public by design)</td><td style="padding:8px">You</td></tr>
+        <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:8px">Device &amp; diagnostics</td><td style="padding:8px">Crash logs, performance traces, OS version, app version, network timing</td><td style="padding:8px">Firebase Crashlytics / Performance</td></tr>
+        <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:8px">Advertising</td><td style="padding:8px">Advertising ID (GAID), ad interactions, coarse location (from IP), consent string (TCF)</td><td style="padding:8px">Google AdMob / UMP</td></tr>
+      </table>
+      <p>We do not collect precise location, contacts, files, or payment info. Advertising ID is only used after UMP consent where required.</p>
+
+      <h2>How we use information &amp; legal bases (GDPR)</h2>
+      <ul>
+        <li><strong>Provide the app</strong> — authenticate, sync your private journey, display the daily verse: <em>contract</em></li>
+        <li><strong>Community safety</strong> — on-device checks, server moderation, report queue, rate limits: <em>legitimate interest + legal obligation</em></li>
+        <li><strong>Reminders</strong> — local scheduled notification at your chosen hour: <em>consent</em> (you toggle it)</li>
+        <li><strong>Improve stability</strong> — crash/performance diagnostics: <em>legitimate interest</em></li>
+        <li><strong>Advertising</strong> — serve and measure banner/interstitial ads: <em>consent</em> where required, <em>legitimate interest</em> for non-personalized ads</li>
+        <li><strong>Account deletion</strong> — fulfill erasure requests: <em>legal obligation</em></li>
+      </ul>
+
+      <h2 id="advertising">Advertising — Google AdMob</h2>
+      <p>VerseLight displays <strong>banner</strong> (persistent, adaptive anchored at bottom) and <strong>interstitial</strong> (full-screen between navigation/actions, max once per ~2 minutes, never on app start/exit or while composing). Both are served by <strong>Google AdMob</strong> (Google LLC).</p>
+      <p>What AdMob may process: <strong>Google Advertising ID</strong>, device model/OS, app package + version, IP-derived coarse location, ad view/click/timing, and your <strong>consent choice (TCF string)</strong> from the Google User Messaging Platform (UMP). This is used to serve, frequency-cap, and measure ads and to detect fraud.</p>
+      <p><strong>Personalized vs non-personalized:</strong> Personalized ads are only shown if you grant consent via the consent form shown on first launch in regulated regions, or via your device Ads settings. You can <strong>withdraw or change consent anytime</strong>: open VerseLight → <strong>Profile → Ads privacy options</strong> to re-open the UMP consent form, or go to Android <strong>Settings → Privacy → Ads → Delete/Reset Advertising ID</strong> or <strong>Delete advertising ID</strong>. Non-personalized ads may still appear without personalization.</p>
+      <p>Learn more: <a href="https://policies.google.com/technologies/ads">How Google uses ad data</a> · <a href="https://policies.google.com/privacy">Google Privacy Policy</a> · <a href="https://support.google.com/admob/answer/6128543">AdMob privacy</a>. Our <a href="/app-ads.txt">app-ads.txt</a> at <code>/app-ads.txt</code> authorizes <code>google.com, pub-8382831211800454, DIRECT, f08c47fec0942fa0</code>.</p>
+      <p>VerseLight does not sell personal information and does not share your email/name with AdMob. Advertising data is processed under Google’s terms as a processor/service provider.</p>
+
       <h2>Public information</h2>
-      <p>Comments, your chosen display name, and avatar are public. Your email, likes, share history, reporter identity, and authentication provider are not public. Do not include sensitive personal information in a comment.</p>
-      <h2>On-device safety</h2>
-      <p>Draft comments are evaluated locally before posting. The draft is not sent to a moderation API. Only comments you choose to post are sent to Firebase.</p>
-      <h2>On-device translation</h2>
-      <p>If you select a language other than English, Google ML Kit downloads a translation model to your device. Interface text, Scripture, and community comments are translated locally and are not sent to a cloud translation service. Machine translations may not always be accurate. Your language choice is stored on your device.</p>
+      <p>Comments, chosen display name, and avatar are <strong>public</strong>. Email, likes, share history, reminder choice, reporter identity, and auth provider are private. Do not include sensitive personal info in a comment. You may delete your own comments; reported content may be hidden pending review.</p>
+
+      <h2>On-device safety &amp; translation</h2>
+      <p><strong>Safety:</strong> Draft comments are evaluated locally (on-device classifier + optional Gemini Nano) before posting — the draft is not sent to a moderation API. Only posted comments go to Firebase/Cloudflare for server verification.</p>
+      <p><strong>Translation:</strong> If you choose a language other than English, Google ML Kit downloads a translation model (~30 MB) to your device. UI and comments are translated locally, not via a cloud translation service. Machine translations may be inaccurate; original Scripture reference is preserved.</p>
+
       <h2>Diagnostics and performance</h2>
-      <p>Firebase Crashlytics and Firebase Performance Monitoring process crash reports, app stability information, device and operating-system details, app version, performance traces, and network timing information. We use this technical information to fix crashes and improve responsiveness; it is not used for advertising.</p>
-      <h2>Service providers</h2>
-      <p>Google Firebase provides authentication, database services, crash reporting, performance monitoring, and public website hosting. Google ML Kit provides downloadable on-device language models. Cloudflare processes posted comments and abuse reports and operates the moderation queue. These providers may process technical data according to their respective privacy terms.</p>
+      <p>Firebase Crashlytics &amp; Performance process crash reports, device/OS, app version, and network timing to fix issues and improve responsiveness. Not used for advertising. Crashlytics collection is always on in current builds.</p>
+
+      <h2>Service providers (sub-processors)</h2>
+      <ul>
+        <li><strong>Google Firebase</strong> — Auth, Firestore, Crashlytics, Performance, Hosting (USA/EU). <a href="https://firebase.google.com/support/privacy">Firebase Privacy</a></li>
+        <li><strong>Google Play services / AdMob / UMP</strong> — Ads serving, consent (TCF), Advertising ID. <a href="https://policies.google.com/privacy">Google Privacy</a></li>
+        <li><strong>Google ML Kit</strong> — on-device translation models</li>
+        <li><strong>Cloudflare Workers &amp; D1</strong> — comment/report processing, moderation queue, rate limiting</li>
+      </ul>
+      <p>Providers act under their privacy terms and only to operate the service. We do not allow them to use your data for unrelated marketing.</p>
+
+      <h2>Data sharing</h2>
+      <p>We do not share personal data with other users or advertisers except: (1) public content you post, (2) service providers above strictly to operate the app, and (3) if required by law. No sale, no cross-context behavioral sharing beyond AdMob’s ad serving as described.</p>
+
       <h2 id="deletion">Retention and deletion</h2>
-      <p>Account deletion removes the Firebase Authentication account, profile, private activity, likes, and authored comments. A request can also be submitted from the public <a href="delete-account.html">account deletion page</a> without reinstalling the app.</p>
-      <p>You can delete your account from Profile → Delete my account and private data. VerseLight removes your profile, private activity, and authored comments. Security and moderation audit records may be retained when necessary to prevent abuse or comply with law, without being displayed publicly.</p>
-      <h2>Security and children</h2>
-      <p>We use access controls, token verification, rate limits, and least-privilege credentials. No system is perfectly secure. VerseLight is not directed to children under 13.</p>
-      <h2>Changes and contact</h2>
-      <p>Material changes will be posted here with a new effective date. For privacy questions or deletion help, use the instructions on the <a href="support.html">support page</a>.</p>
+      <p><strong>In-app deletion:</strong> Profile → <strong>Delete my account and private data</strong> → Confirm. This removes Firebase Auth account, profile, likes, private activity, and authored comments (via backend batch delete). You may be asked to re-authenticate.</p>
+      <p><strong>Without the app:</strong> Visit <a href="delete-account.html">delete-account.html</a> or email <a href="mailto:charles.h.hartmann1@gmail.com?subject=VerseLight%20account%20deletion">charles.h.hartmann1@gmail.com</a> with subject “VerseLight account deletion” from your account email. Verified requests are completed within <strong>30 days</strong>. Deletion is available both in-app and via web (Google Play requirement).</p>
+      <p><strong>What is removed:</strong> Auth account, <code>users/{uid}</code>, <code>publicProfiles/{uid}</code>, <code>likes</code>, <code>activity</code>, comments you authored, and D1 authored comments. <strong>Retained only if needed:</strong> abuse/moderation audit and report records (reporter ID, snapshot) to prevent fraud and enforce safety — not displayed publicly, kept only as long as necessary.</p>
+      <p><strong>Retention:</strong> Account data until you delete or 24 months of inactivity; public comments until you delete; diagnostics aggregated ~90 days; ad consent string per UMP/TTL.</p>
+
+      <h2>Your rights</h2>
+      <p><strong>EEA/UK/Switzerland (GDPR):</strong> access, correction, erasure, restriction, portability, objection, and withdraw consent (via Profile → Ads privacy options or email). You may lodge a complaint with your supervisory authority.</p>
+      <p><strong>US (including California):</strong> VerseLight does not sell or share personal information for cross-context behavioral advertising beyond AdMob’s processing above. You may request access/deletion via the deletion flow or email. Non-personalized ads remain available after opt-out.</p>
+      <p>To exercise rights, email the controller address above. We verify ownership by your account email.</p>
+
+      <h2>Security &amp; transfers</h2>
+      <p>We use least-privilege Firestore rules, token verification (Firebase ID tokens), rate limits, HTTPS in transit, and backup exclusions. No system is perfectly secure. Data may be processed in the US/EU via Firebase/Cloudflare/AdMob infrastructure with standard contractual safeguards for international transfers.</p>
+
+      <h2>Children</h2>
+      <p>VerseLight is for a general audience and is <strong>not directed to children under 13</strong>. We do not knowingly collect personal information from children. Ads are not configured for child-directed treatment; where Google identifies a user as under the age of consent, personalized ads are not served without valid consent, and we tag ad requests accordingly. If you believe a child’s data was provided, contact us for deletion.</p>
+
+      <h2>Cookies &amp; tracking</h2>
+      <p>The Android app does not use web cookies. The website (this hosting) uses no tracking cookies. AdMob in the app may use the Advertising ID and app-local storage for frequency capping and consent (not web cookies).</p>
+
+      <h2>Changes</h2>
+      <p>Material changes will be posted here with a new effective date and, where appropriate, in-app notice. Continued use after changes indicates acceptance.</p>
+
+      <h2>Contact</h2>
+      <p>Privacy questions, rights requests, or deletion help: <a href="mailto:charles.h.hartmann1@gmail.com">charles.h.hartmann1@gmail.com</a> · <a href="support.html">support.html</a> · <a href="delete-account.html">Account deletion page</a></p>
+      <p class="note" style="margin-top:20px">This policy is provided for transparency and does not constitute legal advice. For Ad choices: Android <strong>Settings → Privacy → Ads</strong>. For app-ads.txt see <a href="/app-ads.txt">/app-ads.txt</a>.</p>
     </main>
   </div>
 </body>

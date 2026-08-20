@@ -5,11 +5,11 @@ package com.chartmann1590.verselight.ui
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,13 +48,13 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
@@ -78,7 +78,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -93,6 +92,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
@@ -107,15 +107,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.chartmann1590.verselight.MainViewModel
+import com.chartmann1590.verselight.R
+import com.chartmann1590.verselight.ads.AdMobManager
+import com.chartmann1590.verselight.ads.BannerAd
+import com.chartmann1590.verselight.ads.ConsentManager
 import com.chartmann1590.verselight.model.ActivityType
 import com.chartmann1590.verselight.model.DailyVerse
 import com.chartmann1590.verselight.model.PrivateActivity
 import com.chartmann1590.verselight.model.VerseComment
-import com.chartmann1590.verselight.translation.AppLanguage
 import com.chartmann1590.verselight.translation.OnDeviceTranslationRepository
 import com.chartmann1590.verselight.translation.TranslationModelState
 import com.chartmann1590.verselight.ui.theme.Gold
-import com.chartmann1590.verselight.ui.theme.Ink
 import kotlinx.coroutines.flow.collectLatest
 import java.text.DateFormat
 
@@ -129,10 +131,11 @@ private enum class Tab(val label: String, val icon: ImageVector) {
 @Composable
 fun VerseLightRoot(vm: MainViewModel = viewModel()) {
     val context = LocalContext.current
+    val activity = context as? Activity
     val user by vm.user.collectAsStateWithLifecycle()
     val comments by vm.comments.collectAsStateWithLifecycle()
     val liked by vm.liked.collectAsStateWithLifecycle()
-    val activity by vm.activity.collectAsStateWithLifecycle()
+    val activityList by vm.activity.collectAsStateWithLifecycle()
     val reminder by vm.reminder.collectAsStateWithLifecycle()
     val busy by vm.busy.collectAsStateWithLifecycle()
     val onboardingComplete by vm.onboardingComplete.collectAsStateWithLifecycle()
@@ -142,15 +145,35 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
     var authOpen by rememberSaveable { mutableStateOf(false) }
     var composeOpen by rememberSaveable { mutableStateOf(false) }
     var reportTarget by remember { mutableStateOf<VerseComment?>(null) }
+    var tabSwitchCount by remember { mutableIntStateOf(0) }
     val snackbars = remember { SnackbarHostState() }
+    val bannerId = stringResource(R.string.admob_banner_id)
+    val interstitialId = stringResource(R.string.admob_interstitial_id)
 
     LaunchedEffect(Unit) { vm.messages.collectLatest { snackbars.showSnackbar(vm.translated(it.text)) } }
-    LaunchedEffect(user?.uid) {
-        if (user != null) authOpen = false
+    LaunchedEffect(user?.uid) { if (user != null) authOpen = false }
+    LaunchedEffect(ConsentManager.canRequestAds) {
+        if (ConsentManager.canRequestAds && activity != null) AdMobManager.preloadIfNeeded(activity, interstitialId)
     }
 
-    fun requireAuth(action: () -> Unit) {
-        if (user == null) authOpen = true else action()
+    fun requireAuth(action: () -> Unit) { if (user == null) authOpen = true else action() }
+
+    fun maybeShowInterstitial() {
+        if (activity == null) return
+        if (!ConsentManager.canRequestAds) return
+        tabSwitchCount++
+        if (tabSwitchCount >= 4 && AdMobManager.canShowInterstitial()) {
+            tabSwitchCount = 0
+            AdMobManager.showInterstitial(activity, interstitialId)
+        } else {
+            AdMobManager.preloadIfNeeded(activity, interstitialId)
+        }
+    }
+
+    fun onPostSuccess() {
+        if (activity != null && ConsentManager.canRequestAds && AdMobManager.canShowInterstitial()) {
+            AdMobManager.showInterstitial(activity, interstitialId)
+        }
     }
 
     val translationContext = remember(languageTag) {
@@ -187,9 +210,15 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
         contentWindowInsets = WindowInsets(0),
         snackbarHost = { SnackbarHost(snackbars) },
         bottomBar = {
-            NavigationBar(modifier = Modifier.navigationBarsPadding()) {
-                Tab.entries.forEach { item ->
-                    NavigationBarItem(selected = tab == item, onClick = { tab = item }, icon = { Icon(item.icon, null) }, label = { LText(item.label) })
+            Column(Modifier.navigationBarsPadding()) {
+                BannerAd(adUnitId = bannerId)
+                NavigationBar {
+                    Tab.entries.forEach { item ->
+                        NavigationBarItem(selected = tab == item, onClick = {
+                            if (tab != item) maybeShowInterstitial()
+                            tab = item
+                        }, icon = { Icon(item.icon, null) }, label = { LText(item.label) })
+                    }
                 }
             }
         },
@@ -202,7 +231,7 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
                     vm.recordShare()
                 }, onComment = { requireAuth { composeOpen = true } })
                 Tab.COMMUNITY -> CommunityScreen(comments, user?.uid, padding, onSignIn = { authOpen = true }, onComment = { requireAuth { composeOpen = true } }, onDelete = vm::deleteComment, onReport = { comment -> requireAuth { reportTarget = comment } })
-                Tab.JOURNEY -> JourneyScreen(activity, user != null, padding, onSignIn = { authOpen = true })
+                Tab.JOURNEY -> JourneyScreen(activityList, user != null, padding, onSignIn = { authOpen = true })
                 Tab.PROFILE -> ProfileScreen(user?.displayName, user?.email, user?.photoUrl?.toString(), reminder.first, reminder.second, languageTag, translationModelState, padding, onSignIn = { authOpen = true }, onSignOut = vm::signOut, onUpdateName = vm::updateName, onReminder = vm::setReminder, onLanguage = vm::selectLanguage, onDelete = vm::deleteAccount)
             }
         }
@@ -210,7 +239,7 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
     }
 
     if (authOpen) AuthDialog(busy = busy, onDismiss = { authOpen = false }, onEmail = { email, password, register, name -> if (register) vm.register(email, password, name) else vm.signInEmail(email, password) }, onGoogle = { vm.signInGoogle(context as Activity) }, onReset = vm::resetPassword)
-    if (composeOpen) CommentDialog(busy, onDismiss = { composeOpen = false }, onPost = { text, complete -> vm.postComment(text) { result -> complete(result.explanation, result.allowed); if (result.allowed) composeOpen = false } })
+    if (composeOpen) CommentDialog(busy, onDismiss = { composeOpen = false }, onPost = { text, complete -> vm.postComment(text) { result -> complete(result.explanation, result.allowed); if (result.allowed) { composeOpen = false; onPostSuccess() } } })
     reportTarget?.let { comment ->
         ReportDialog(busy, onDismiss = { reportTarget = null }, onSubmit = { reason, details ->
             vm.report(comment, reason, details)
@@ -465,11 +494,13 @@ private fun ActivityCard(item: PrivateActivity) {
 @Composable
 private fun ProfileScreen(name: String?, email: String?, avatar: String?, reminderEnabled: Boolean, reminderHour: Int, languageTag: String, modelState: TranslationModelState, padding: PaddingValues, onSignIn: () -> Unit, onSignOut: () -> Unit, onUpdateName: (String) -> Unit, onReminder: (Boolean, Int) -> Unit, onLanguage: (String, (Result<Unit>) -> Unit) -> Unit, onDelete: () -> Unit) {
     val context = LocalContext.current
+    val activity = context as? Activity
     var editName by remember(name) { mutableStateOf(name.orEmpty()) }
     var hour by remember(reminderHour) { mutableIntStateOf(reminderHour) }
     var confirmDelete by remember { mutableStateOf(false) }
     var languageOpen by remember { mutableStateOf(false) }
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (granted) onReminder(true, hour) }
+    fun openUrl(url: String) { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
     LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item { LText("Profile & peace", style = MaterialTheme.typography.headlineMedium); LText("Make VerseLight feel like home.", color = MaterialTheme.colorScheme.onSurfaceVariant) }
         if (email == null) item { EmptyCard("Sign in with Google or email to save your journey across devices.", "Sign in", onSignIn) }
@@ -495,11 +526,37 @@ private fun ProfileScreen(name: String?, email: String?, avatar: String?, remind
                 if (reminderEnabled) { Spacer(Modifier.height(12.dp)); Slider(value = hour.toFloat(), onValueChange = { hour = it.toInt() }, onValueChangeFinished = { onReminder(true, hour) }, valueRange = 0f..23f, steps = 22); LText(formatHour(hour), modifier = Modifier.align(Alignment.CenterHorizontally)) }
             } }
         }
+        item {
+            Card(shape = RoundedCornerShape(22.dp)) {
+                Column {
+                    LegalRow(Icons.Default.PrivacyTip, "Privacy Policy") { openUrl("https://verselight-daily-2026.web.app/privacy.html") }
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = .15f))
+                    LegalRow(Icons.Default.Security, "Community Guidelines") { openUrl("https://verselight-daily-2026.web.app/community.html") }
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = .15f))
+                    LegalRow(Icons.Default.Settings, "Ads privacy options") {
+                        if (activity != null) ConsentManager.showPrivacyOptionsForm(activity)
+                    }
+                }
+            }
+        }
         if (email != null) item { OutlinedButton(onClick = onSignOut, Modifier.fillMaxWidth()) { Icon(Icons.AutoMirrored.Filled.Logout, null); Spacer(Modifier.width(8.dp)); LText("Sign out") }; TextButton(onClick = { confirmDelete = true }, Modifier.fillMaxWidth()) { LText("Delete my account and private data", color = MaterialTheme.colorScheme.error) } }
-        item { LText("World English Bible · Public domain\nVerseLight 1.0.0", style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) }
+        item {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                LText("World English Bible · Public domain\nVerseLight 1.0.0", style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center)
+                Spacer(Modifier.height(8.dp))
+                LText("Contains ads · Personalized ads require consent", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            }
+        }
     }
     if (languageOpen) LanguagePickerDialog(languageTag, modelState, onDismiss = { languageOpen = false }, onSelect = onLanguage)
     if (confirmDelete) AlertDialog(onDismissRequest = { confirmDelete = false }, title = { LText("Delete your account?") }, text = { LText("This permanently removes your VerseLight profile. Public comments are removed by the backend cleanup process.") }, confirmButton = { TextButton(onClick = { confirmDelete = false; onDelete() }) { LText("Delete permanently") } }, dismissButton = { TextButton(onClick = { confirmDelete = false }) { LText("Cancel") } })
+}
+
+@Composable
+private fun LegalRow(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Row(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, null, tint = MaterialTheme.colorScheme.primary); Spacer(Modifier.width(12.dp)); LText(label, modifier = Modifier.weight(1f), fontWeight = FontWeight.Medium); Icon(Icons.Default.Share, null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
 }
 
 @Composable
