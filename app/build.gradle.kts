@@ -72,7 +72,7 @@ dependencies {
     implementation("com.google.firebase:firebase-perf")
     implementation("androidx.credentials:credentials:1.5.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.2.0")
     implementation("com.google.mlkit:genai-prompt:1.0.0-beta2")
     implementation("com.google.mlkit:translate:17.0.3")
     implementation("com.google.mlkit:language-id:17.0.6")
