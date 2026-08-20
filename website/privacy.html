@@ -25,9 +25,14 @@
       <p>Comments, your chosen display name, and avatar are public. Your email, likes, share history, reporter identity, and authentication provider are not public. Do not include sensitive personal information in a comment.</p>
       <h2>On-device safety</h2>
       <p>Draft comments are evaluated locally before posting. The draft is not sent to a moderation API. Only comments you choose to post are sent to Firebase.</p>
+      <h2>On-device translation</h2>
+      <p>If you select a language other than English, Google ML Kit downloads a translation model to your device. Interface text, Scripture, and community comments are translated locally and are not sent to a cloud translation service. Machine translations may not always be accurate. Your language choice is stored on your device.</p>
+      <h2>Diagnostics and performance</h2>
+      <p>Firebase Crashlytics and Firebase Performance Monitoring process crash reports, app stability information, device and operating-system details, app version, performance traces, and network timing information. We use this technical information to fix crashes and improve responsiveness; it is not used for advertising.</p>
       <h2>Service providers</h2>
-      <p>Google Firebase provides authentication, database services, and public website hosting. Cloudflare processes abuse reports and operates the moderation queue. These providers may process technical data according to their respective privacy terms.</p>
-      <h2>Retention and deletion</h2>
+      <p>Google Firebase provides authentication, database services, crash reporting, performance monitoring, and public website hosting. Google ML Kit provides downloadable on-device language models. Cloudflare processes posted comments and abuse reports and operates the moderation queue. These providers may process technical data according to their respective privacy terms.</p>
+      <h2 id="deletion">Retention and deletion</h2>
+      <p>Account deletion removes the Firebase Authentication account, profile, private activity, likes, and authored comments. A request can also be submitted from the public <a href="delete-account.html">account deletion page</a> without reinstalling the app.</p>
       <p>You can delete your account from Profile → Delete my account and private data. VerseLight removes your profile, private activity, and authored comments. Security and moderation audit records may be retained when necessary to prevent abuse or comply with law, without being displayed publicly.</p>
       <h2>Security and children</h2>
       <p>We use access controls, token verification, rate limits, and least-privilege credentials. No system is perfectly secure. VerseLight is not directed to children under 13.</p>

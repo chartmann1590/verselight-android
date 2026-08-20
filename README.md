@@ -8,13 +8,17 @@ VerseLight is a native Android daily Bible verse app with a calm, biblical desig
 - One deterministic UTC verse each day from the public-domain World English Bible
 - Guest reading and Android sharing
 - Firebase email/password and Google authentication
+- Three-step first-run onboarding with account, Google, and explicit guest paths
+- Persistent language selection with downloadable ML Kit on-device translation models
 - Private likes, share history, preferences, and activity history in Firestore
 - Public comments with editable public display name and optional Google avatar
 - Embedded on-device safety classification plus Gemini Nano/AICore when supported by the device
 - A second Worker-side safety gate; clients cannot write new comments directly to Firestore
+- Firebase Crashlytics and Performance Monitoring for stability and performance diagnostics
 - Cloudflare Worker, D1 moderation queue, distinct-reporter threshold hiding, and protected moderator routes
 - Opt-in local daily notification
 - Responsive landing, privacy, community-guidelines, support, and account-deletion pages
+- Google Play account-deletion URL: https://verselight-daily-2026.web.app/delete-account
 
 ## Local Android setup
 

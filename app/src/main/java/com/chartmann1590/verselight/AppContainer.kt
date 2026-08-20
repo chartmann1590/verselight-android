@@ -6,6 +6,7 @@ import com.chartmann1590.verselight.data.CommunityRepository
 import com.chartmann1590.verselight.data.DailyVerseRepository
 import com.chartmann1590.verselight.data.PreferenceRepository
 import com.chartmann1590.verselight.moderation.OnDeviceSafetyClassifier
+import com.chartmann1590.verselight.translation.OnDeviceTranslationRepository
 
 class AppContainer(context: Context) {
     val verses = DailyVerseRepository()
@@ -13,5 +14,5 @@ class AppContainer(context: Context) {
     val community = CommunityRepository()
     val preferences = PreferenceRepository(context)
     val safety = OnDeviceSafetyClassifier(context)
+    val translation = OnDeviceTranslationRepository()
 }
-

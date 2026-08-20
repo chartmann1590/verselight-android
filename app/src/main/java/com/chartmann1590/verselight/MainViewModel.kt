@@ -8,6 +8,8 @@ import com.chartmann1590.verselight.model.ModerationResult
 import com.chartmann1590.verselight.model.PrivateActivity
 import com.chartmann1590.verselight.model.VerseComment
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.chartmann1590.verselight.translation.TranslationModelState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,9 +34,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val activity: StateFlow<List<PrivateActivity>> = user.flatMapLatest { if (it == null) flowOf(emptyList()) else container.community.activity() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val reminder = container.preferences.reminder.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false to 8)
+    val onboardingComplete = container.preferences.onboardingComplete.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val languageTag = container.preferences.languageTag.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
+    val translationModelState: StateFlow<TranslationModelState> = container.translation.modelState
     val busy = MutableStateFlow(false)
     private val _messages = MutableSharedFlow<AppMessage>(extraBufferCapacity = 4)
     val messages = _messages.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            languageTag.collect { tag ->
+                FirebaseCrashlytics.getInstance().setCustomKey("translation_language", tag)
+                container.translation.prepareLanguage(tag)
+            }
+        }
+        viewModelScope.launch {
+            user.collect { account -> FirebaseCrashlytics.getInstance().setUserId(account?.uid.orEmpty()) }
+        }
+    }
 
     fun signInEmail(email: String, password: String) = launchTask("Welcome back") { container.auth.signInWithEmail(email, password) }
     fun register(email: String, password: String, name: String) = launchTask("Account created — check your email to verify it") { container.auth.register(email, password, name) }
@@ -52,7 +69,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun postComment(text: String, onResult: (ModerationResult) -> Unit) {
         viewModelScope.launch {
             busy.value = true
-            val moderation = container.safety.classify(text)
+            val localModeration = container.safety.classify(text)
+            val englishText = if (languageTag.value == "en") text else
+                runCatching { container.translation.translateToEnglish(text, languageTag.value) }.getOrDefault(text)
+            val translatedModeration = if (englishText == text) localModeration else container.safety.classify(englishText)
+            val moderation = if (!localModeration.allowed) localModeration else translatedModeration
             if (!moderation.allowed) {
                 busy.value = false
                 onResult(moderation)
@@ -76,6 +97,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             ReminderScheduler.schedule(getApplication(), enabled, hour)
             _messages.emit(AppMessage(if (enabled) "Daily reminder set" else "Daily reminder turned off"))
         }
+    }
+
+    suspend fun translated(text: String, dynamicSource: Boolean = false): String =
+        if (dynamicSource) container.translation.translateDynamic(text, languageTag.value)
+        else container.translation.translateUi(text, languageTag.value)
+
+    fun selectLanguage(tag: String, onComplete: (Result<Unit>) -> Unit = {}) {
+        viewModelScope.launch {
+            busy.value = true
+            val result = container.translation.prepareLanguage(tag)
+            if (result.isSuccess) container.preferences.setLanguage(tag)
+            else FirebaseCrashlytics.getInstance().recordException(result.exceptionOrNull()!!)
+            busy.value = false
+            onComplete(result)
+        }
+    }
+
+    fun finishOnboarding(tag: String) {
+        viewModelScope.launch { container.preferences.completeOnboarding(tag) }
     }
 
     private fun launchTask(success: String, task: suspend () -> Unit) {
