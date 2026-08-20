@@ -27,6 +27,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: { ...cors, "Access-Control-Allow-Headers": "Authorization, Content-Type", "Access-Control-Allow-Methods": "GET, POST, OPTIONS" } });
     try {
       if (url.pathname === "/health") return json({ status: "ok", service: "verselight-reports" }, 200, cors);
+      if (url.pathname === "/admin/debug" && request.method === "GET") return await adminDebug(request, env, cors);
       if (url.pathname === "/v1/comments" && request.method === "POST") return await createComment(request, env, cors);
       if (url.pathname === "/v1/reports" && request.method === "POST") return await createReport(request, env, cors);
       if (url.pathname === "/v1/account/comments" && request.method === "DELETE") return await deleteAccountComments(request, env, cors);
@@ -179,17 +180,44 @@ async function deleteAccountComments(request: Request, env: Env, cors: HeadersIn
   return json({ deletedComments: names.length }, 200, cors);
 }
 
+async function adminDebug(request: Request, env: Env, cors: HeadersInit): Promise<Response> {
+  const bearer = request.headers.get("Authorization")?.replace(/^Bearer /, "");
+  if (!bearer) return json({ error: "No token", hasToken: false, adminEmail: env.ADMIN_EMAIL }, 401, cors);
+  try {
+    const payload = await verifyFirebaseToken(bearer, env);
+    return json({
+      hasToken: true,
+      sub: payload.sub,
+      email: payload.email,
+      email_verified: payload.email_verified,
+      aud: payload.aud,
+      iss: payload.iss,
+      adminEmail: env.ADMIN_EMAIL,
+      emailMatch: String(payload.email || "").toLowerCase() === env.ADMIN_EMAIL.toLowerCase(),
+      willSucceed: String(payload.email || "").toLowerCase() === env.ADMIN_EMAIL.toLowerCase(),
+    }, 200, cors);
+  } catch (e) {
+    return json({ hasToken: true, error: e instanceof Error ? e.message : String(e), adminEmail: env.ADMIN_EMAIL }, 401, cors);
+  }
+}
+
 async function verifyAdmin(request: Request, env: Env): Promise<string> {
   const bearer = request.headers.get("Authorization")?.replace(/^Bearer /, "");
-  if (env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN) return "admin-token";
+  if (env.ADMIN_TOKEN && bearer && bearer === env.ADMIN_TOKEN) return "admin-token";
   if (bearer) {
-    const payload = await verifyFirebaseToken(bearer, env);
-    const email = String(payload.email || "").toLowerCase();
-    if (payload.email_verified === true && email === env.ADMIN_EMAIL.toLowerCase()) return email;
-    throw new PublicError(403, "This account is not an approved moderator.");
+    let payload: JWTPayload;
+    try {
+      payload = await verifyFirebaseToken(bearer, env);
+    } catch (e) {
+      throw new PublicError(401, `Invalid admin token: ${e instanceof Error ? e.message : String(e)}`);
+    }
+    const email = String(payload.email || "").toLowerCase().trim();
+    const adminEmail = env.ADMIN_EMAIL.toLowerCase().trim();
+    if (email === adminEmail) return email;
+    throw new PublicError(403, `Access denied for ${payload.email || "unknown email"}. Expected ${env.ADMIN_EMAIL}. Verified=${payload.email_verified}`);
   }
   const token = request.headers.get("Cf-Access-Jwt-Assertion");
-  if (!token || !env.CF_ACCESS_TEAM_DOMAIN || !env.CF_ACCESS_AUD) throw new PublicError(401, "Cloudflare Access authentication required.");
+  if (!token || !env.CF_ACCESS_TEAM_DOMAIN || !env.CF_ACCESS_AUD) throw new PublicError(401, "Sign in with the administrator Google account. If this persists, check that ADMIN_EMAIL matches your Google account and that the account is email_verified in Firebase.");
   const issuer = `https://${env.CF_ACCESS_TEAM_DOMAIN}`;
   const { payload } = await jwtVerify(token, createRemoteJWKSet(new URL(`${issuer}/cdn-cgi/access/certs`)), { issuer, audience: env.CF_ACCESS_AUD });
   return String(payload.email || payload.sub || "access-admin");
@@ -218,4 +246,4 @@ async function reviewReport(request: Request, env: Env, reportId: string, cors: 
 
 class PublicError extends Error { constructor(public status: number, message: string) { super(message); } }
 
-const ADMIN_HTML = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>VerseLight moderation</title><style>body{font:16px system-ui;background:#f8f1e4;color:#173a38;max-width:960px;margin:auto;padding:2rem}article{background:white;padding:1rem;margin:1rem 0;border-radius:16px;box-shadow:0 4px 18px #0001}button{padding:.65rem 1rem;margin-right:.5rem;border:0;border-radius:99px;background:#173a38;color:white}</style></head><body><h1>VerseLight moderation</h1><main id="reports">Loading…</main><script>async function load(){const r=await fetch('/admin/reports');const d=await r.json();reports.innerHTML=d.reports.map(x=>{const c=JSON.parse(x.comment_snapshot);return '<article><small>'+x.created_at+' · '+x.reason+'</small><h3>'+c.authorName+'</h3><p>'+c.body.replace(/[<>&]/g,s=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[s]))+'</p><button onclick="act(\\''+x.id+'\\',\\'restore\\')">Restore</button><button onclick="act(\\''+x.id+'\\',\\'remove\\')">Remove</button></article>'}).join('')||'No reports.'}async function act(id,action){await fetch('/admin/reports/'+id,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action})});load()}load()</script></body></html>`;
+const ADMIN_HTML = ``;

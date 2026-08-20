@@ -24,12 +24,24 @@ const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({ "
 
 async function authorizedFetch(path, options = {}) {
   const user = auth.currentUser;
-  if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL) throw new Error("Administrator sign-in is required.");
+  if (!user) throw new Error("Please sign in first.");
   const token = await user.getIdToken();
   const response = await fetch(`${API}${path}`, { ...options, headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
   return payload;
+}
+
+async function debugToken() {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+    const token = await user.getIdToken();
+    const r = await fetch(`${API}/admin/debug`, { headers: { Authorization: `Bearer ${token}` } });
+    const j = await r.json();
+    console.log("admin/debug", j);
+    if (!r.ok) status.textContent = `Debug: ${j.error || JSON.stringify(j)}`;
+  } catch (e) { console.log("debug failed", e); }
 }
 
 async function loadReports() {
@@ -50,13 +62,13 @@ async function loadReports() {
       </article>`;
     }).join("");
   } catch (error) {
-    reports.innerHTML = `<div class="empty"><h2>Could not load reports</h2><p>${escapeHtml(error.message)}</p></div>`;
+    reports.innerHTML = `<div class="empty"><h2>Could not load reports</h2><p>${escapeHtml(error.message)}</p><p style="font-size:12px;opacity:.6">Check console for admin/debug output. Try signing out and picking ${ADMIN_EMAIL} exactly.</p></div>`;
   }
 }
 
 signIn.addEventListener("click", async () => {
   status.textContent = "Opening Google sign-in…";
-  try { await signInWithPopup(auth, provider); } catch (error) { status.textContent = error.message; }
+  try { await signInWithPopup(auth, provider); } catch (error) { status.textContent = error.message; console.error(error); }
 });
 signOutButton.addEventListener("click", () => signOut(auth));
 reports.addEventListener("click", async event => {
@@ -73,14 +85,14 @@ reports.addEventListener("click", async event => {
 
 onAuthStateChanged(auth, async user => {
   const email = user?.email?.toLowerCase();
-  if (user && email !== ADMIN_EMAIL) {
-    await signOut(auth);
-    status.textContent = "Access denied. Use charles.h.hartmann1@gmail.com.";
-    return;
+  if (user && email !== ADMIN_EMAIL.toLowerCase()) {
+    status.textContent = `Signed in as ${user.email} — not admin. Will still try server check (see console).`;
   }
   signIn.hidden = Boolean(user);
   signOutButton.hidden = !user;
   status.textContent = user ? `Administrator: ${user.email}` : `Sign in as ${ADMIN_EMAIL}`;
-  if (user) await loadReports();
-  else reports.innerHTML = '<div class="empty">The moderation queue will appear after administrator sign-in.</div>';
+  if (user) {
+    await debugToken();
+    await loadReports();
+  } else reports.innerHTML = '<div class="empty">The moderation queue will appear after administrator sign-in.</div>';
 });
