@@ -1,0 +1,32 @@
+name: CodeQL
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+  schedule: [{ cron: '0 6 * * 1' }]
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    strategy:
+      matrix:
+        language: [java-kotlin, javascript]
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: github/codeql-action/init@v3
+        with: { languages: ${{ matrix.language }} }
+      - if: matrix.language == 'java-kotlin'
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17', cache: gradle }
+      - if: matrix.language == 'java-kotlin'
+        run: ./gradlew :app:assembleDebug --no-daemon
+      - if: matrix.language == 'javascript'
+        uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm, cache-dependency-path: worker/package-lock.json }
+      - uses: github/codeql-action/analyze@v3
+        with: { category: "/language:${{matrix.language}}" }
