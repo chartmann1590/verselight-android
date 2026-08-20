@@ -1,7 +1,8 @@
 title: VerseLight Worker Comment Moderator
-description: Read, moderate, and delete public comments through the least-privilege moderation Worker.
+description: Legacy least-privilege permissions for comment moderation. Production uses roles/datastore.user because the Worker also creates comments and private activity records.
 stage: GA
 includedPermissions:
+  - datastore.entities.create
   - datastore.entities.get
   - datastore.entities.list
   - datastore.entities.update

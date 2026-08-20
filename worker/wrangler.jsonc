@@ -6,7 +6,8 @@
   "observability": { "enabled": true },
   "vars": {
     "FIREBASE_PROJECT_ID": "verselight-daily-2026",
-    "ALLOWED_ORIGIN": "https://chartmann1590.github.io"
+    "ALLOWED_ORIGIN": "https://verselight-daily-2026.web.app",
+    "ADMIN_EMAIL": "charles.h.hartmann1@gmail.com"
   },
   "d1_databases": [
     {

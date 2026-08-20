@@ -53,6 +53,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -123,6 +124,7 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
     var tab by rememberSaveable { mutableStateOf(Tab.TODAY) }
     var authOpen by rememberSaveable { mutableStateOf(false) }
     var composeOpen by rememberSaveable { mutableStateOf(false) }
+    var reportTarget by remember { mutableStateOf<VerseComment?>(null) }
     val snackbars = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) { vm.messages.collectLatest { snackbars.showSnackbar(it.text) } }
@@ -152,7 +154,7 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
                     context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_TEXT, text) }, "Share today's light"))
                     vm.recordShare()
                 }, onComment = { requireAuth { composeOpen = true } })
-                Tab.COMMUNITY -> CommunityScreen(comments, user?.uid, padding, onSignIn = { authOpen = true }, onComment = { requireAuth { composeOpen = true } }, onDelete = vm::deleteComment, onReport = { comment -> requireAuth { vm.report(comment, "abuse") } })
+                Tab.COMMUNITY -> CommunityScreen(comments, user?.uid, padding, onSignIn = { authOpen = true }, onComment = { requireAuth { composeOpen = true } }, onDelete = vm::deleteComment, onReport = { comment -> requireAuth { reportTarget = comment } })
                 Tab.JOURNEY -> JourneyScreen(activity, user != null, padding, onSignIn = { authOpen = true })
                 Tab.PROFILE -> ProfileScreen(user?.displayName, user?.email, user?.photoUrl?.toString(), reminder.first, reminder.second, padding, onSignIn = { authOpen = true }, onSignOut = vm::signOut, onUpdateName = vm::updateName, onReminder = vm::setReminder, onDelete = vm::deleteAccount)
             }
@@ -162,6 +164,34 @@ fun VerseLightRoot(vm: MainViewModel = viewModel()) {
 
     if (authOpen) AuthDialog(busy = busy, onDismiss = { authOpen = false }, onEmail = { email, password, register, name -> if (register) vm.register(email, password, name) else vm.signInEmail(email, password) }, onGoogle = { vm.signInGoogle(context as Activity) }, onReset = vm::resetPassword)
     if (composeOpen) CommentDialog(busy, onDismiss = { composeOpen = false }, onPost = { text, complete -> vm.postComment(text) { result -> complete(result.explanation, result.allowed); if (result.allowed) composeOpen = false } })
+    reportTarget?.let { comment ->
+        ReportDialog(busy, onDismiss = { reportTarget = null }, onSubmit = { reason, details ->
+            vm.report(comment, reason, details)
+            reportTarget = null
+        })
+    }
+}
+
+@Composable
+private fun ReportDialog(busy: Boolean, onDismiss: () -> Unit, onSubmit: (String, String) -> Unit) {
+    val reasons = listOf("abuse" to "Abuse", "hate" to "Hate", "threat" to "Threat", "sexual" to "Sexual content", "spam" to "Spam", "other" to "Other")
+    var selected by rememberSaveable { mutableStateOf("abuse") }
+    var details by rememberSaveable { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Report this reflection") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Choose the clearest reason. Three independent reports temporarily hide a comment for moderator review.")
+                reasons.forEach { (value, label) ->
+                    FilterChip(selected = selected == value, onClick = { selected = value }, label = { Text(label) })
+                }
+                OutlinedTextField(value = details, onValueChange = { details = it.take(500) }, label = { Text("Optional details") }, modifier = Modifier.fillMaxWidth(), minLines = 2)
+            }
+        },
+        confirmButton = { Button(onClick = { onSubmit(selected, details.trim()) }, enabled = !busy) { Text("Submit report") } },
+        dismissButton = { TextButton(onClick = onDismiss, enabled = !busy) { Text("Cancel") } },
+    )
 }
 
 @Composable

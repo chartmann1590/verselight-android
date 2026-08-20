@@ -78,21 +78,26 @@ class CommunityRepository {
 
     suspend fun addComment(verse: DailyVerse, body: String): String {
         val user = requireNotNull(auth.currentUser)
-        val profile = db.collection("publicProfiles").document(user.uid).get().await()
-        val comment = db.collection("dailyVerses").document(verse.dayKey).collection("comments").document()
-        val data = mapOf(
-            "dayKey" to verse.dayKey,
-            "authorUid" to user.uid,
-            "authorName" to (profile.getString("displayName") ?: "Friend"),
-            "authorAvatarUrl" to profile.getString("avatarUrl"),
-            "body" to body.trim(),
-            "createdAt" to FieldValue.serverTimestamp(),
-            "editedAt" to null,
-            "moderationStatus" to "visible",
-        )
-        val activity = db.collection("users").document(user.uid).collection("activity").document("comment_${comment.id}")
-        db.batch().set(comment, data).set(activity, activityMap(verse, ActivityType.COMMENT, body.trim().take(100), comment.id)).commit().await()
-        return comment.id
+        val token = user.getIdToken(false).await().token.orEmpty()
+        return withContext(Dispatchers.IO) {
+            val connection = (URL("${BuildConfig.REPORTS_BASE_URL}/v1/comments").openConnection() as HttpURLConnection).apply {
+                requestMethod = "POST"
+                setRequestProperty("Authorization", "Bearer $token")
+                setRequestProperty("Content-Type", "application/json")
+                connectTimeout = 10_000
+                readTimeout = 30_000
+                doOutput = true
+            }
+            val payload = JSONObject()
+                .put("dayKey", verse.dayKey)
+                .put("reference", verse.reference)
+                .put("body", body.trim())
+            connection.outputStream.use { it.write(payload.toString().toByteArray()) }
+            val responseText = (if (connection.responseCode in 200..299) connection.inputStream else connection.errorStream)
+                ?.bufferedReader()?.use { it.readText() }.orEmpty()
+            if (connection.responseCode !in 200..299) error(JSONObject(responseText).optString("error", "Comment could not be posted"))
+            JSONObject(responseText).getString("commentId")
+        }
     }
 
     suspend fun deleteComment(dayKey: String, commentId: String) {

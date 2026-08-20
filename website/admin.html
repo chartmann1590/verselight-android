@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#173a38">
+  <title>VerseLight moderation</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    body{--cream:#fffbf4;--paper:#f8f1e4;--ink:#173a38;--muted:#6c6a62;--gold:#b58a43;min-height:100vh;background:linear-gradient(150deg,#dcece5,#fffbf4 48%,#f3e4ca);color:var(--ink)}
+    .admin-shell{width:min(960px,calc(100% - 32px));margin:auto;padding:28px 0 80px}
+    .admin-nav{height:auto;margin-bottom:36px}.admin-hero{background:#173a38;color:white;border-radius:30px;padding:clamp(28px,6vw,58px);box-shadow:var(--shadow)}
+    .admin-hero h1{color:#fff;font-size:clamp(2.4rem,6vw,4.5rem);margin:.15em 0}.admin-hero p{max-width:660px;color:#dcece5}
+    .admin-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:24px}.admin-actions .button{background:#a9d3c4;color:#07352e!important;border:0;cursor:pointer}
+    .admin-actions .secondary{background:transparent;color:#fff!important;border:1px solid #ffffff55}.status{font-weight:700}
+    #reports{display:grid;gap:18px;margin-top:28px}.report{background:var(--cream);padding:26px;border-radius:22px;box-shadow:var(--shadow);border:1px solid #173a3815}
+    .report header{display:flex;justify-content:space-between;gap:20px;align-items:start}.report h2{margin:.2rem 0;font-size:1.45rem}.meta{color:var(--muted);font-size:.9rem}.reason{display:inline-block;padding:.2rem .7rem;border-radius:99px;background:#f3e4ca;color:#733c46;font-weight:800;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em}
+    .comment{font:1.15rem/1.55 Georgia,serif;border-left:4px solid var(--gold);padding:12px 18px;margin:20px 0;background:var(--paper);border-radius:0 12px 12px 0}.empty{text-align:center;padding:60px 20px;background:#ffffffcc;color:#4c4b45;border-radius:24px}.empty h2{color:#173a38}
+    [hidden]{display:none!important}
+  </style>
+</head>
+<body>
+  <main class="admin-shell">
+    <nav class="admin-nav"><a class="brand" href="./">VERSE<span>Light</span></a><a href="./">Public website</a></nav>
+    <section class="admin-hero">
+      <p class="eyebrow">Protected moderation</p>
+      <h1>Community review</h1>
+      <p>Reports, automatic hides, and moderator decisions for VerseLight. Access is restricted to the verified administrator account.</p>
+      <div class="admin-actions">
+        <button id="sign-in" class="button">Sign in with Google</button>
+        <button id="sign-out" class="button secondary" hidden>Sign out</button>
+        <span id="status" class="status">Sign in as charles.h.hartmann1@gmail.com</span>
+      </div>
+    </section>
+    <section id="reports" aria-live="polite"><div class="empty">The moderation queue will appear after administrator sign-in.</div></section>
+  </main>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

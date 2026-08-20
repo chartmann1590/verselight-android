@@ -7,12 +7,14 @@ interface Env {
   FIREBASE_CLIENT_EMAIL: string;
   FIREBASE_PRIVATE_KEY: string;
   ALLOWED_ORIGIN: string;
+  ADMIN_EMAIL: string;
   CF_ACCESS_TEAM_DOMAIN?: string;
   CF_ACCESS_AUD?: string;
   ADMIN_TOKEN?: string;
 }
 
 type ReportBody = { dayKey: string; commentId: string; reason: string; optionalDetails?: string };
+type CommentBody = { dayKey: string; body: string; reference: string };
 type FirestoreComment = { authorUid: string; authorName: string; body: string; moderationStatus: string };
 
 const json = (data: unknown, status = 200, headers: HeadersInit = {}) => Response.json(data, { status, headers });
@@ -25,11 +27,12 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: { ...cors, "Access-Control-Allow-Headers": "Authorization, Content-Type", "Access-Control-Allow-Methods": "GET, POST, OPTIONS" } });
     try {
       if (url.pathname === "/health") return json({ status: "ok", service: "verselight-reports" }, 200, cors);
+      if (url.pathname === "/v1/comments" && request.method === "POST") return await createComment(request, env, cors);
       if (url.pathname === "/v1/reports" && request.method === "POST") return await createReport(request, env, cors);
       if (url.pathname === "/v1/account/comments" && request.method === "DELETE") return await deleteAccountComments(request, env, cors);
-      if (url.pathname === "/admin" && request.method === "GET") return await adminPage(request, env);
-      if (url.pathname === "/admin/reports" && request.method === "GET") return await listReports(request, env);
-      if (url.pathname.startsWith("/admin/reports/") && request.method === "POST") return await reviewReport(request, env, url.pathname.split("/")[3]);
+      if (url.pathname === "/admin" && request.method === "GET") return Response.redirect("https://verselight-daily-2026.web.app/admin", 302);
+      if (url.pathname === "/admin/reports" && request.method === "GET") return await listReports(request, env, cors);
+      if (url.pathname.startsWith("/admin/reports/") && request.method === "POST") return await reviewReport(request, env, url.pathname.split("/")[3], cors);
       return json({ error: "Not found" }, 404, cors);
     } catch (error) {
       console.error(JSON.stringify({ event: "request_failed", path: url.pathname, error: error instanceof Error ? error.message : String(error) }));
@@ -37,6 +40,62 @@ export default {
     }
   },
 };
+
+export function classifyCommentSafety(raw: string): { allowed: boolean; categories: string[] } {
+  const normalized = raw.normalize("NFKC").toLowerCase()
+    .replace(/0/g, "o").replace(/1/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s").replace(/7/g, "t")
+    .replace(/(.)\1{2,}/g, "$1");
+  const compact = normalized.replace(/[^a-z0-9]+/g, "");
+  const spaced = normalized.replace(/[^a-z0-9']+/g, " ").trim();
+  const categories = new Set<string>();
+  const has = (...terms: string[]) => terms.some(term => spaced.includes(term) || compact.includes(term.replace(/\s/g, "")));
+  if (has("i will kill", "you should die", "murder you", "shoot you", "stab you")) categories.add("threat");
+  if (has("subhuman", "vermin", "racially inferior", "ethnically inferior")) categories.add("hate");
+  if (has("nobody wants you", "worthless loser", "hate you", "shut up idiot")) categories.add("harassment");
+  if (has("child porn", "forced sex", "rape you", "molest")) categories.add("sexual abuse");
+  if (has("fuck", "fucking", "motherfucker", "shit", "bitch", "cunt", "asshole")) categories.add("strong profanity");
+  return { allowed: categories.size === 0, categories: [...categories] };
+}
+
+async function createComment(request: Request, env: Env, cors: HeadersInit): Promise<Response> {
+  const user = await verifyFirebaseUser(request, env);
+  const body = await request.json<CommentBody>();
+  const text = (body.body || "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(body.dayKey || "")) throw new PublicError(400, "Invalid verse date.");
+  if (!text || text.length > 500) throw new PublicError(400, "Comments must be between 1 and 500 characters.");
+  if (!body.reference || body.reference.length > 80) throw new PublicError(400, "Invalid verse reference.");
+  const safety = classifyCommentSafety(text);
+  if (!safety.allowed) throw new PublicError(422, `Please rephrase this comment. It may contain ${safety.categories.join(", ")}.`);
+
+  const token = await googleAccessToken(env);
+  const base = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)`;
+  const root = `projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents`;
+  const profileResponse = await fetch(`${base}/documents/publicProfiles/${user.sub}`, { headers: { Authorization: `Bearer ${token}` } });
+  const profile = profileResponse.ok ? await profileResponse.json<{ fields?: Record<string, { stringValue?: string }> }>() : undefined;
+  const authorName = profile?.fields?.displayName?.stringValue || String(user.name || "Friend").slice(0, 60);
+  const avatar = profile?.fields?.avatarUrl?.stringValue || String(user.picture || "");
+  const commentId = crypto.randomUUID().replaceAll("-", "");
+  const now = new Date().toISOString();
+  const commentName = `${root}/dailyVerses/${body.dayKey}/comments/${commentId}`;
+  const activityName = `${root}/users/${user.sub}/activity/comment_${commentId}`;
+  const commit = await fetch(`${base}/documents:commit`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ writes: [
+      { update: { name: commentName, fields: {
+        dayKey: { stringValue: body.dayKey }, authorUid: { stringValue: user.sub }, authorName: { stringValue: authorName },
+        authorAvatarUrl: avatar ? { stringValue: avatar } : { nullValue: "NULL_VALUE" }, body: { stringValue: text },
+        createdAt: { timestampValue: now }, editedAt: { nullValue: "NULL_VALUE" }, moderationStatus: { stringValue: "visible" },
+      } }, currentDocument: { exists: false } },
+      { update: { name: activityName, fields: {
+        dayKey: { stringValue: body.dayKey }, reference: { stringValue: body.reference }, preview: { stringValue: text.slice(0, 100) },
+        type: { stringValue: "COMMENT" }, commentId: { stringValue: commentId }, createdAt: { timestampValue: now },
+      } }, currentDocument: { exists: false } },
+    ] }),
+  });
+  if (!commit.ok) throw new Error(`Firestore comment commit failed: ${commit.status} ${(await commit.text()).slice(0, 500)}`);
+  return json({ commentId, status: "visible" }, 201, cors);
+}
 
 async function createReport(request: Request, env: Env, cors: HeadersInit): Promise<Response> {
   const user = await verifyFirebaseUser(request, env);
@@ -64,6 +123,10 @@ async function createReport(request: Request, env: Env, cors: HeadersInit): Prom
 async function verifyFirebaseUser(request: Request, env: Env): Promise<JWTPayload> {
   const token = request.headers.get("Authorization")?.match(/^Bearer (.+)$/)?.[1];
   if (!token) throw new PublicError(401, "Sign in is required.");
+  return verifyFirebaseToken(token, env);
+}
+
+async function verifyFirebaseToken(token: string, env: Env): Promise<JWTPayload> {
   const jwks = createRemoteJWKSet(new URL("https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com"));
   const { payload } = await jwtVerify(token, jwks, { issuer: `https://securetoken.google.com/${env.FIREBASE_PROJECT_ID}`, audience: env.FIREBASE_PROJECT_ID });
   if (!payload.sub) throw new PublicError(401, "Invalid account token.");
@@ -119,6 +182,12 @@ async function deleteAccountComments(request: Request, env: Env, cors: HeadersIn
 async function verifyAdmin(request: Request, env: Env): Promise<string> {
   const bearer = request.headers.get("Authorization")?.replace(/^Bearer /, "");
   if (env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN) return "admin-token";
+  if (bearer) {
+    const payload = await verifyFirebaseToken(bearer, env);
+    const email = String(payload.email || "").toLowerCase();
+    if (payload.email_verified === true && email === env.ADMIN_EMAIL.toLowerCase()) return email;
+    throw new PublicError(403, "This account is not an approved moderator.");
+  }
   const token = request.headers.get("Cf-Access-Jwt-Assertion");
   if (!token || !env.CF_ACCESS_TEAM_DOMAIN || !env.CF_ACCESS_AUD) throw new PublicError(401, "Cloudflare Access authentication required.");
   const issuer = `https://${env.CF_ACCESS_TEAM_DOMAIN}`;
@@ -126,13 +195,13 @@ async function verifyAdmin(request: Request, env: Env): Promise<string> {
   return String(payload.email || payload.sub || "access-admin");
 }
 
-async function listReports(request: Request, env: Env): Promise<Response> {
+async function listReports(request: Request, env: Env, cors: HeadersInit): Promise<Response> {
   await verifyAdmin(request, env);
   const rows = await env.DB.prepare("SELECT id, day_key, comment_id, reason, comment_snapshot, status, created_at, reviewed_at, resolution FROM reports ORDER BY created_at DESC LIMIT 100").all();
-  return json({ reports: rows.results });
+  return json({ reports: rows.results }, 200, cors);
 }
 
-async function reviewReport(request: Request, env: Env, reportId: string): Promise<Response> {
+async function reviewReport(request: Request, env: Env, reportId: string, cors: HeadersInit): Promise<Response> {
   const admin = await verifyAdmin(request, env);
   const body = await request.json<{ action: "restore" | "remove" }>();
   if (!["restore", "remove"].includes(body.action)) throw new PublicError(400, "Invalid action.");
@@ -144,12 +213,7 @@ async function reviewReport(request: Request, env: Env, reportId: string): Promi
     env.DB.prepare("UPDATE reports SET status = 'reviewed', reviewed_at = ?1, reviewer_uid = ?2, resolution = ?3 WHERE comment_id = ?4").bind(now, admin, body.action, report.comment_id),
     env.DB.prepare("INSERT INTO moderation_audit (id, report_id, comment_id, action, moderator_uid, created_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6)").bind(crypto.randomUUID(), reportId, report.comment_id, body.action, admin, now),
   ]);
-  return json({ success: true, status: body.action === "restore" ? "restored" : "removed" });
-}
-
-async function adminPage(request: Request, env: Env): Promise<Response> {
-  await verifyAdmin(request, env);
-  return new Response(ADMIN_HTML, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+  return json({ success: true, status: body.action === "restore" ? "restored" : "removed" }, 200, cors);
 }
 
 class PublicError extends Error { constructor(public status: number, message: string) { super(message); } }

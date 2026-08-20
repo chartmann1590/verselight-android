@@ -2,9 +2,11 @@ package com.chartmann1590.verselight.moderation
 
 import android.content.Context
 import com.chartmann1590.verselight.model.ModerationResult
+import com.google.mlkit.genai.common.DownloadStatus
 import com.google.mlkit.genai.common.FeatureStatus
 import com.google.mlkit.genai.prompt.Generation
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import java.text.Normalizer
 import kotlin.math.exp
@@ -15,6 +17,29 @@ import kotlin.math.exp
  * the small bag-of-words safety models commonly deployed at the edge, without a network model.
  */
 class OnDeviceSafetyClassifier(@Suppress("UNUSED_PARAMETER") context: Context? = null) {
+    suspend fun prepareGeminiNano(): String = withContext(Dispatchers.Default) {
+        runCatching {
+            val model = Generation.getClient()
+            try {
+                if (model.checkStatus() == FeatureStatus.DOWNLOADABLE) {
+                    model.download().collect { status ->
+                        if (status is DownloadStatus.DownloadFailed) throw status.e
+                    }
+                }
+                statusName(model.checkStatus())
+            } finally {
+                model.close()
+            }
+        }.getOrElse { "embedded-only" }
+    }
+
+    suspend fun engineStatus(): String = withContext(Dispatchers.Default) {
+        runCatching {
+            val model = Generation.getClient()
+            try { statusName(model.checkStatus()) } finally { model.close() }
+        }.getOrElse { "embedded-only" }
+    }
+
     suspend fun classify(raw: String): ModerationResult = withContext(Dispatchers.Default) {
         val normalized = normalize(raw)
         if (normalized.isBlank()) return@withContext ModerationResult(false, setOf("empty"), 1f, "Write something before posting.")
@@ -67,6 +92,13 @@ class OnDeviceSafetyClassifier(@Suppress("UNUSED_PARAMETER") context: Context? =
         }.getOrElse {
             ModerationResult(true, confidence = (1f - lexicalRisk).coerceIn(0f, 1f), explanation = "This comment looks respectful.")
         }
+    }
+
+    private fun statusName(status: Int): String = when (status) {
+        FeatureStatus.AVAILABLE -> "gemini-nano-available"
+        FeatureStatus.DOWNLOADABLE -> "gemini-nano-downloadable"
+        FeatureStatus.DOWNLOADING -> "gemini-nano-downloading"
+        else -> "embedded-only"
     }
 
     private fun score(tokens: List<String>, joined: String, weights: Map<String, Double>, bias: Double): Double {

@@ -10,7 +10,8 @@ VerseLight is a native Android daily Bible verse app with a calm, biblical desig
 - Firebase email/password and Google authentication
 - Private likes, share history, preferences, and activity history in Firestore
 - Public comments with editable public display name and optional Google avatar
-- Embedded linear safety classification plus Gemini Nano/AICore when available
+- Embedded on-device safety classification plus Gemini Nano/AICore when supported by the device
+- A second Worker-side safety gate; clients cannot write new comments directly to Firestore
 - Cloudflare Worker, D1 moderation queue, distinct-reporter threshold hiding, and protected moderator routes
 - Opt-in local daily notification
 - Responsive landing, privacy, community-guidelines, support, and account-deletion pages
@@ -37,7 +38,7 @@ firebase deploy --only firestore --project verselight-daily-2026
 
 ## Cloudflare Worker
 
-The Worker lives in `worker/` and uses a D1 database plus a rate-limit binding. Required secrets are `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, and either Cloudflare Access settings or an emergency `ADMIN_TOKEN`.
+The Worker lives in `worker/` and uses a D1 database plus a rate-limit binding. It authenticates comment authors with Firebase ID tokens, repeats the deterministic safety check, and is the only production path that can create comments. Required secrets are `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, and an emergency `ADMIN_TOKEN`.
 
 ```text
 cd worker
@@ -47,17 +48,17 @@ npm test
 npm run deploy
 ```
 
-The Firebase service account should receive only the custom permissions in `infra/worker-firestore-role.yaml`.
+The Firebase service account uses the standard Datastore User role. Moderator access additionally requires a verified Firebase ID token for `charles.h.hartmann1@gmail.com`; the emergency token is break-glass access and is not used by the browser dashboard.
 
 ## Website
 
-Static public files are in `website/` and deploy to `https://verselight-daily-2026.web.app` with `firebase deploy --only hosting`.
+Static public files are in `website/` and deploy to `https://verselight-daily-2026.web.app` with `firebase deploy --only hosting`. The Charles-only moderator dashboard is at `https://verselight-daily-2026.web.app/admin`.
 
 ## Privacy and content
 
 The World English Bible text is public domain; the translation name is a trademark of eBible.org and the text is reproduced without modification. See [eBible.org](https://ebible.org/details.php?id=engwebp).
 
-Comment drafts are moderated locally. Posted comments and public profile name/avatar are public. Account email, likes, shares, reporter identity, and activity history are private.
+Comment drafts are moderated locally before any network request. Allowed drafts are checked again by the Worker before Firestore storage. Posted comments and public profile name/avatar are public. Account email, likes, shares, reporter identity, and activity history are private.
 
 ## License
 

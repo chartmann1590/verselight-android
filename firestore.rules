@@ -28,26 +28,12 @@ service cloud.firestore {
 
       match /comments/{commentId} {
         allow read: if resource.data.moderationStatus in ['visible', 'restored'];
-        allow create: if signedIn()
-          && request.resource.data.keys().hasOnly(['dayKey', 'authorUid', 'authorName', 'authorAvatarUrl', 'body', 'createdAt', 'editedAt', 'moderationStatus'])
-          && request.resource.data.dayKey == dayKey
-          && request.resource.data.authorUid == request.auth.uid
-          && validName(request.resource.data.authorName)
-          && request.resource.data.body is string
-          && request.resource.data.body.size() >= 1
-          && request.resource.data.body.size() <= 500
-          && request.resource.data.moderationStatus == 'visible'
-          && request.resource.data.createdAt == request.time;
-        allow update: if signedIn()
-          && resource.data.authorUid == request.auth.uid
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['body', 'editedAt'])
-          && request.resource.data.body is string
-          && request.resource.data.body.size() >= 1
-          && request.resource.data.body.size() <= 500
-          && request.resource.data.editedAt == request.time;
+        // Comment creation and moderation are server-authoritative. The app first
+        // performs on-device AI moderation, then the reporting Worker applies a
+        // second safety gate and writes through its least-privileged service account.
+        allow create, update: if false;
         allow delete: if signedIn() && resource.data.authorUid == request.auth.uid;
       }
     }
   }
 }
-

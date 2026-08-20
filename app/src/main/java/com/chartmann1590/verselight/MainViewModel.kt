@@ -66,7 +66,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteComment(comment: VerseComment) = launchTask("Comment deleted") { container.community.deleteComment(comment.dayKey, comment.id) }
-    fun report(comment: VerseComment, reason: String) = launchTask("Thank you. The report is queued for review") { container.community.report(comment.dayKey, comment.id, reason) }
+    fun report(comment: VerseComment, reason: String, details: String = "") = launchTask("Thank you. The report is queued for review") {
+        container.community.report(comment.dayKey, comment.id, reason, details)
+    }
 
     fun setReminder(enabled: Boolean, hour: Int) {
         viewModelScope.launch {
