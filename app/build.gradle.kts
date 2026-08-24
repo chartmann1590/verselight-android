@@ -1,4 +1,4 @@
-plugins {
+﻿plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
@@ -13,6 +13,15 @@ if (file("google-services.json").exists()) {
 android {
     namespace = "com.chartmann1590.verselight"
     compileSdk = 36
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("upload-keystore.jks")
+            storePassword = "verselight123"
+            keyAlias = "upload"
+            keyPassword = "verselight123"
+        }
+    }
 
     defaultConfig {
         applicationId = "com.chartmann1590.verselight"
@@ -36,6 +45,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

@@ -1,0 +1,45 @@
+Ein kleines Licht, jeden Tag. ✨
+Ein gemeinsamer Bibelvers, ein ruhiger Moment — zusammen, weltweit.
+
+Warum VerseLight?
+In einer lauten Welt ist VerseLight bewusst leise. Kein endloser Feed. Keine Follower, keine DMs. Nur ein sorgfältig geteilter Vers pro Tag zum Innehalten, Atmen und Neubeginnen. Lesen, speichern und offline mitnehmen — überall.
+
+☀ EIN VERS, TÄGLICH GEMEINSAM
+• Derselbe Vers für alle, jeden Tag — ein gemeinsamer Rhythmus
+• Aus der World English Bible (WEB) — gemeinfrei, für immer kostenlos
+• Schönes, ablenkungsfreies Lesen in Creme, Tinte & Gold
+
+♡ DEIN PRIVATER WEG
+• Deine Likes und Shares bleiben privat — nur für dich
+• Favoriten speichern und dein Licht immer wieder besuchen
+• Keine öffentlichen Zähler, kein Druck
+
+✦ GROSSZÜGIGE GEMEINSCHAFT
+• Teile auf Wunsch einen kurzen Gedanken — Freundlichkeit ist Pflicht
+• On-Device-Moderation hält Gespräche sanft und respektvoll
+• Kein Feed zum Scrollen, kein Algorithmus
+
+🌍 60+ SPRACHEN, AUF DEM GERÄT
+• Sofortübersetzung via On-Device ML Kit — ~30MB Modelle, funktioniert offline nach Download
+• Spanisch, Französisch, Deutsch, Portugiesisch, Italienisch, Japanisch, Koreanisch, Arabisch, Chinesisch und 50+ mehr
+• Originaler WEB-Text immer verfügbar
+
+🔔 TÄGLICHE ERINNERUNG, DEIN RHYTHMUS
+• Sanfte tägliche Benachrichtigung zu deiner Wunschzeit — niemals Spam
+• Offline-First: jederzeit lesen, auch ohne Empfang
+• Starte den Morgen mit Licht
+
+🛡 PRIVAT & SICHER BY DESIGN
+• Mit Firebase Auth & Firestore — minimale Daten, maximaler Respekt
+• Kein Verkauf persönlicher Daten. Dein Weg gehört dir.
+• DSGVO-bereit mit Google UMP-Consent für EWR/UK
+• Nativ in Kotlin + Jetpack Compose — schnell, modern, schön, offline-fähig
+
+— Enthält Werbung —
+VerseLight ist für immer kostenlos ohne In-App-Käufe. Um kostenlos zu bleiben, zeigen wir Banner- und Interstitial-Anzeigen über Google AdMob. Anzeigen verdecken niemals deinen Vers und Interstitials sind selten und schließbar. Im EWR/UK wird die Zustimmung über UMP eingeholt.
+
+Sprachen: Englisch, Spanisch (ES & 419), Französisch (FR & CA), Deutsch, Portugiesisch (BR & PT), Italienisch, Japanisch, Koreanisch, Arabisch, Chinesisch (vereinfacht), Niederländisch, Hindi, Indonesisch, Russisch, Türkisch, Polnisch und 40+ mehr via On-Device-Übersetzung.
+
+Mit Sorgfalt gestaltet in Tinte #173a38, Creme #f8f1e4 und Gold #b88746 — ruhig, warm, premium.
+
+Ein kleines Licht für deinen Tag — starte heute. Lade VerseLight kostenlos.

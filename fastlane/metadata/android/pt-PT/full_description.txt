@@ -1,0 +1,45 @@
+Um pouco de luz, todos os dias. ✨
+O mesmo versículo para todos, um momento de calma — juntos, em todo o mundo.
+
+Porquê VerseLight?
+Num mundo ruidoso, o VerseLight é silêncio por design. Sem feed infinito. Sem seguidores, sem mensagens. Apenas um versículo por dia, partilhado por todos, para refletir, respirar e recomeçar. Leia, guarde e leve consigo mesmo offline.
+
+☀ UM VERSÍCULO, PARTILHADO TODOS OS DIAS
+• O mesmo versículo para todos, todos os dias — um ritmo comum
+• Da World English Bible (WEB) — domínio público, grátis para sempre
+• Leitura bela, sem distrações, em creme, tinta e dourado
+
+♡ JORNADA PRIVADA
+• Os seus gostos e partilhas ficam privados — só para si
+• Guarde favoritos e revisite a sua luz ao longo do tempo
+• Sem contadores públicos, sem pressão
+
+✦ COMUNIDADE GENEROSA
+• Partilhe uma breve reflexão se quiser — a gentileza é obrigatória
+• Moderação no dispositivo mantém conversas suaves e respeitosas
+• Sem feed para percorrer, sem algoritmo para perseguir
+
+🌍 MAIS DE 60 IDIOMAS, NO DISPOSITIVO
+• Tradução instantânea via ML Kit no dispositivo — modelos ~30MB, funciona offline após descarregar
+• Espanhol, francês, alemão, português, italiano, japonês, coreano, árabe, chinês e 50+ outros
+• Texto original WEB sempre acessível
+
+🔔 LEMBRETE DIÁRIO, AO SEU RITMO
+• Notificação diária suave à hora que escolher — nunca spam
+• Offline primeiro: leia a qualquer momento, mesmo sem sinal
+• Comece a manhã com luz
+
+🛡 PRIVADO E SEGURO POR CONCEÇÃO
+• Feito com Firebase Auth & Firestore — dados mínimos, respeito máximo
+• Não vendemos dados pessoais. A sua jornada é sua.
+• Pronto para RGPD com fluxo de consentimento Google UMP para EEE/RU
+• Nativo em Kotlin + Jetpack Compose — rápido, moderno, bonito e offline
+
+— Contém anúncios —
+VerseLight é grátis para sempre sem compras na app. Para continuar gratuito exibimos anúncios banner e intersticiais via Google AdMob. Os anúncios nunca cobrem o seu versículo e os intersticiais são raros e dispensáveis. No EEE/RU, o consentimento é solicitado via UMP.
+
+Idiomas: inglês, espanhol (ES e 419), francês (FR e CA), alemão, português (BR e PT), italiano, japonês, coreano, árabe, chinês simplificado, neerlandês, hindi, indonésio, russo, turco, polaco e 40+ outros via tradução no dispositivo.
+
+Feito com cuidado em tinta #173a38, creme #f8f1e4 e dourado #b88746 — calmo, acolhedor e premium.
+
+Um pouco de luz para o seu dia — comece hoje. Descarregue VerseLight grátis.

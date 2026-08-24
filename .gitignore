@@ -24,3 +24,8 @@ serviceAccount*.json
 *firebase-adminsdk*
 secrets.properties
 keystore.properties
+
+# Play publishing secrets
+scripts/verselight-play-publisher.json
+app/upload-keystore.jks
+store-*.png
