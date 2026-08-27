@@ -1,4 +1,4 @@
-﻿plugins {
+plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
@@ -83,7 +83,7 @@ dependencies {
     implementation("androidx.credentials:credentials:1.5.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.2.0")
-    implementation("com.google.mlkit:genai-prompt:1.0.0-beta2")
+    implementation("com.google.mlkit:genai-prompt:1.0.0-beta4")
     implementation("com.google.mlkit:translate:17.0.3")
     implementation("com.google.mlkit:language-id:17.0.6")
     implementation("com.google.android.gms:play-services-ads:25.4.0")
