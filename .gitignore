@@ -29,3 +29,4 @@ keystore.properties
 scripts/verselight-play-publisher.json
 app/upload-keystore.jks
 store-*.png
+PLAY_REVIEW_CREDENTIALS.md
