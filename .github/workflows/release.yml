@@ -36,28 +36,31 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # Optional: signed release builds. The keystore and
-      # google-services.json are gitignored, so CI restores them from
-      # secrets only when you have configured them. Without them the
-      # workflow still publishes a debug APK release.
-      #
-      # Required secrets for signed builds:
-      #   ANDROID_KEYSTORE_BASE64  - base64 of app/upload-keystore.jks
-      #   KEYSTORE_PASSWORD        - keystore password
-      #   KEY_ALIAS                - key alias (e.g. "upload")
-      #   KEY_PASSWORD             - key password
-      #   GOOGLE_SERVICES_JSON_BASE64 - base64 of app/google-services.json
-      - name: Restore release keystore (optional)
+      # Signed release build with production ads. The upload keystore and
+      # google-services.json are gitignored, so CI restores them from the
+      # ANDROID_KEYSTORE_BASE64 / GOOGLE_SERVICES_JSON_BASE64 repo secrets
+      # (keystore passwords live in app/build.gradle.kts). Both secrets are
+      # required — the job fails loudly without them so we never ship a
+      # debug APK disguised as a release.
+      - name: Restore release keystore
         if: secrets.ANDROID_KEYSTORE_BASE64 != ''
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > app/upload-keystore.jks
           echo "Keystore restored."
 
-      - name: Restore google-services.json (optional)
+      - name: Restore google-services.json
         if: secrets.GOOGLE_SERVICES_JSON_BASE64 != ''
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > app/google-services.json
           echo "google-services.json restored."
+
+      - name: Verify signing files present
+        run: |
+          missing=0
+          if [ ! -s app/upload-keystore.jks ]; then echo "::error::Missing app/upload-keystore.jks — set the ANDROID_KEYSTORE_BASE64 repo secret."; missing=1; fi
+          if [ ! -s app/google-services.json ]; then echo "::error::Missing app/google-services.json — set the GOOGLE_SERVICES_JSON_BASE64 repo secret."; missing=1; fi
+          if [ "$missing" -ne 0 ]; then exit 1; fi
+          echo "Signing files present."
 
       - name: Read app version
         id: version
@@ -69,13 +72,7 @@ jobs:
           echo "tag=v$VERSION_NAME-b${{ github.run_number }}" >> "$GITHUB_OUTPUT"
           echo "App version: $VERSION_NAME ($VERSION_CODE), tag: v$VERSION_NAME-b${{ github.run_number }}"
 
-      - name: Build debug APK
-        run: ./gradlew :app:assembleDebug --stacktrace
-
-      - name: Build signed release (only with keystore secret)
-        if: secrets.ANDROID_KEYSTORE_BASE64 != ''
-        env:
-          ORG_GRADLE_PROJECT_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      - name: Build signed release APK + AAB (production ads)
         run: ./gradlew :app:assembleRelease :app:bundleRelease --stacktrace
 
       - name: Stage release assets
@@ -83,12 +80,11 @@ jobs:
         run: |
           TAG="${{ steps.version.outputs.tag }}"
           mkdir -p dist
-          cp app/build/outputs/apk/debug/app-debug.apk "dist/lumaverse-$TAG-debug.apk"
-          cp app/build/outputs/apk/debug/app-debug.apk dist/lumaverse-latest-debug.apk
-          if ls app/build/outputs/apk/release/*.apk >/dev/null 2>&1; then
-            cp app/build/outputs/apk/release/*.apk "dist/" 2>/dev/null || true
-            cp app/build/outputs/apk/release/*.apk dist/lumaverse-latest-release.apk 2>/dev/null || true
-          fi
+          # Main download: signed release APK with production AdMob ads.
+          # lumaverse-latest.apk keeps a stable download URL:
+          # .../releases/latest/download/lumaverse-latest.apk
+          cp app/build/outputs/apk/release/app-release.apk "dist/lumaverse-$TAG.apk"
+          cp app/build/outputs/apk/release/app-release.apk dist/lumaverse-latest.apk
           if ls app/build/outputs/bundle/release/*.aab >/dev/null 2>&1; then
             cp app/build/outputs/bundle/release/*.aab "dist/" 2>/dev/null || true
           fi
@@ -98,7 +94,7 @@ jobs:
             echo "Auto-built from commit \`${{ github.sha }}\` on \`main\`."
             echo ""
             echo "- App version: \`${{ steps.version.outputs.version_name }}\` (versionCode \`${{ steps.version.outputs.version_code }}\`)"
-            echo "- Debug APK is always attached. A signed release APK/AAB is attached when signing secrets are configured."
+            echo "- Signed **release** build (R8 minified) with **production AdMob ads** — download \`lumaverse-$TAG.apk\`."
             echo "- Google Play: https://play.google.com/store/apps/details?id=com.chartmann1590.verselight"
           } > dist/notes.md
           ls -la dist
@@ -109,7 +105,9 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: LumaVerse ${{ steps.version.outputs.version_name }} (build ${{ github.run_number }})
           body_path: dist/notes.md
-          files: dist/*
+          files: |
+            dist/lumaverse-*.apk
+            dist/*.aab
           generate_release_notes: true
           make_latest: true
           prerelease: false

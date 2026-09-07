@@ -17,9 +17,9 @@ LumaVerse gives everyone the same beautiful verse each day from the public-domai
 
 ## 📦 Latest release
 
-Every push to `main` automatically builds the app and publishes a [GitHub Release](https://github.com/chartmann1590/verselight-android/releases/latest) with a downloadable APK.
+Every push to `main` automatically builds the signed **release** app (production AdMob ads) and publishes a [GitHub Release](https://github.com/chartmann1590/verselight-android/releases/latest) with a downloadable APK.
 
-- **Download the newest APK:** https://github.com/chartmann1590/verselight-android/releases/latest
+- **Download the newest release APK:** https://github.com/chartmann1590/verselight-android/releases/latest/download/lumaverse-latest.apk
 - **All releases & changelogs:** https://github.com/chartmann1590/verselight-android/releases
 - **Build status:** https://github.com/chartmann1590/verselight-android/actions/workflows/release.yml
 

@@ -32,11 +32,20 @@
       } else {
         dateEl.textContent = tag;
       }
+      // Prefer the signed release APK (stable name), then any
+      // non-debug APK, then anything else attached.
       var assets = Array.isArray(rel.assets) ? rel.assets : [];
       var apk =
         assets.find(function (a) {
+          return (a.name || "") === "lumaverse-latest.apk";
+        }) ||
+        assets.find(function (a) {
+          return /\.apk$/i.test(a.name || "") && !/debug/i.test(a.name || "");
+        }) ||
+        assets.find(function (a) {
           return /\.apk$/i.test(a.name || "");
-        }) || assets[0];
+        }) ||
+        assets[0];
       if (apk && apk.browser_download_url) {
         dlEl.href = apk.browser_download_url;
         var size = apk.size ? " (" + (apk.size / 1048576).toFixed(1) + " MB)" : "";
