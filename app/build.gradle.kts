@@ -1,4 +1,4 @@
-﻿plugins {
+plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
@@ -72,7 +72,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.2.1")
     implementation("androidx.graphics:graphics-path:1.1.0")
     implementation("androidx.work:work-runtime-ktx:2.11.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.11.0")
     implementation("io.coil-kt.coil3:coil-compose:3.4.0")
 
     implementation(platform("com.google.firebase:firebase-bom:34.17.0"))
