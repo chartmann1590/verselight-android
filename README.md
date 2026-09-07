@@ -5,11 +5,25 @@
 LumaVerse gives everyone the same beautiful verse each day from the public-domain **World English Bible**, space to share respectful reflections, and a private record of the words you carry. Free to use, supported by unobtrusive ads.
 
 [![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.chartmann1590.verselight)
+[![Latest release](https://img.shields.io/github/v/release/chartmann1590/verselight-android?label=latest%20release)](https://github.com/chartmann1590/verselight-android/releases/latest)
+[![Release build](https://github.com/chartmann1590/verselight-android/actions/workflows/release.yml/badge.svg)](https://github.com/chartmann1590/verselight-android/actions/workflows/release.yml)
 [![Buy Me A Coffee](https://img.shields.io/badge/%E2%98%95%20Buy%20me%20a%20beer-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/charleshartmann)
 
 - **Get it on Google Play:** https://play.google.com/store/apps/details?id=com.chartmann1590.verselight
 - **Website:** https://verselight-daily-2026.web.app
 - **Support the project:** https://buymeacoffee.com/charleshartmann — ☕ Buy me a beer
+
+---
+
+## 📦 Latest release
+
+Every push to `main` automatically builds the app and publishes a [GitHub Release](https://github.com/chartmann1590/verselight-android/releases/latest) with a downloadable APK.
+
+- **Download the newest APK:** https://github.com/chartmann1590/verselight-android/releases/latest
+- **All releases & changelogs:** https://github.com/chartmann1590/verselight-android/releases
+- **Build status:** https://github.com/chartmann1590/verselight-android/actions/workflows/release.yml
+
+> The website also shows the current release live (version, date, download button) — see the *Latest release* section on https://verselight-daily-2026.web.app.
 
 ---
 
