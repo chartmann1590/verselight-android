@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin.js
+
+Sitemap: https://verselight-daily-2026.web.app/sitemap.xml

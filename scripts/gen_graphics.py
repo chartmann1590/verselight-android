@@ -18,8 +18,8 @@ except:
     title_font = ImageFont.load_default()
     sub_font = ImageFont.load_default()
     serif_font = ImageFont.load_default()
-draw.text((48, 70), 'VERSE', font=title_font, fill='#173a38')
-draw.text((208, 70), 'Light', font=title_font, fill='#b88746')
+draw.text((48, 70), 'LUMA', font=title_font, fill='#173a38')
+draw.text((200, 70), 'Verse', font=title_font, fill='#b88746')
 draw.text((48, 145), 'A little light, every day.', font=sub_font, fill='#173a38')
 draw.text((48, 175), 'One shared Bible verse \u2022 Private journey \u2022 Gracious community', font=sub_font, fill='#6c6a62')
 draw.text((48, 215), '\u2600 Daily verse  \u2661 Private  \u2726 Community  \U0001f310 60+ languages', font=serif_font, fill='#315a4e')
@@ -28,7 +28,7 @@ phone_w, phone_h = 260, 410
 draw.rounded_rectangle([phone_x, phone_y, phone_x+phone_w, phone_y+phone_h], radius=32, fill='#172320')
 draw.rounded_rectangle([phone_x+12, phone_y+18, phone_x+phone_w-12, phone_y+phone_h-12], radius=28, fill='#f8f1e4')
 draw.rounded_rectangle([phone_x+90, phone_y+18, phone_x+170, phone_y+32], radius=8, fill='#172320')
-draw.text((phone_x+60, phone_y+45), '\u2600  VERSELIGHT', font=sub_font, fill='#173a38')
+draw.text((phone_x+60, phone_y+45), '\u2600  LUMAVERSE', font=sub_font, fill='#173a38')
 draw.rounded_rectangle([phone_x+28, phone_y+85, phone_x+phone_w-28, phone_y+280], radius=18, fill='white', outline='#e6dcc8')
 draw.text((phone_x+110, phone_y+100), '\u2726', font=title_font, fill='#b88746')
 verse = '"The light shines in\nthe darkness, and the\ndarkness hasn\'t\novercome it."'
@@ -67,7 +67,7 @@ for i, (title, verse, ref) in enumerate([
     except:
         big = ImageFont.load_default()
         med = small = big
-    d.text((60, 35), 'VERSELight', font=med, fill='white')
+    d.text((60, 35), 'LumaVerse', font=med, fill='white')
     d.text((Wp-180, 45), '\u2600', font=med, fill='#b88746')
     d.rounded_rectangle([60, 220, Wp-60, 1100], radius=48, fill='white')
     d.text((Wp//2-20, 320), '\u2726', font=big, fill='#b88746', anchor='mm')

@@ -10,7 +10,7 @@ Write-Host "1. Enable Google Play Android Developer API..."
 gcloud services enable androidpublisher.googleapis.com --project $PROJECT_ID
 
 Write-Host "2. Create service account..."
-gcloud iam service-accounts create $SA_NAME --display-name="VerseLight Play Publisher" --project $PROJECT_ID
+gcloud iam service-accounts create $SA_NAME --display-name="LumaVerse Play Publisher" --project $PROJECT_ID
 
 Write-Host "3. Create JSON key (keep private, add to .gitignore)..."
 gcloud iam service-accounts keys create $KEY_FILE --iam-account $SA_EMAIL --project $PROJECT_ID
@@ -26,7 +26,7 @@ Write-Host @"
      - Manage store presence (listing, graphics)
      - Manage production / testing tracks
      - Manage orders & subscriptions (if needed)
-   Scope: Apply to 'VerseLight' (com.chartmann1590.verselight) -> Send invite
+   Scope: Apply to 'LumaVerse' (com.chartmann1590.verselight) -> Send invite
 
 5. First AAB must be uploaded manually before API can publish updates.
 

@@ -1,8 +1,8 @@
 Un poco de luz, cada día. ✨
 Un mismo versículo para todos, un momento de calma — juntos en todo el mundo.
 
-¿Por qué VerseLight?
-En un mundo ruidoso, VerseLight es calma por diseño. Sin feed infinito. Sin seguidores, sin mensajes. Solo un versículo al día, compartido por todos, para reflexionar, respirar y volver a empezar. Léelo, guárdalo y llévalo contigo aun sin conexión.
+¿Por qué LumaVerse?
+En un mundo ruidoso, LumaVerse es calma por diseño. Sin feed infinito. Sin seguidores, sin mensajes. Solo un versículo al día, compartido por todos, para reflexionar, respirar y volver a empezar. Léelo, guárdalo y llévalo contigo aun sin conexión.
 
 ☀ UN VERSÍCULO, COMPARTIDO CADA DÍA
 • El mismo versículo para todos, cada día — un ritmo en común
@@ -36,10 +36,10 @@ En un mundo ruidoso, VerseLight es calma por diseño. Sin feed infinito. Sin seg
 • Nativo en Kotlin + Jetpack Compose — rápido, moderno, hermoso y offline
 
 — Contiene anuncios —
-VerseLight es gratis para siempre sin compras dentro de la app. Para mantenerse gratis muestra anuncios banner e intersticiales vía Google AdMob. Los anuncios nunca cubren tu versículo y los intersticiales son poco frecuentes y se pueden cerrar. En EEE/RU se solicita consentimiento vía UMP.
+LumaVerse es gratis para siempre sin compras dentro de la app. Para mantenerse gratis muestra anuncios banner e intersticiales vía Google AdMob. Los anuncios nunca cubren tu versículo y los intersticiales son poco frecuentes y se pueden cerrar. En EEE/RU se solicita consentimiento vía UMP.
 
 Idiomas: inglés, español (ES y 419), francés (FR y CA), alemán, portugués (BR y PT), italiano, japonés, coreano, árabe, chino simplificado, holandés, hindi, indonesio, ruso, turco, polaco y 40+ más con traducción en el dispositivo.
 
 Diseñado con cuidado en tinta #173a38, crema #f8f1e4 y dorado #b88746 — tranquilo, cálido y premium.
 
-Un poco de luz para tu día — empieza hoy. Descarga VerseLight gratis.
+Un poco de luz para tu día — empieza hoy. Descarga LumaVerse gratis.

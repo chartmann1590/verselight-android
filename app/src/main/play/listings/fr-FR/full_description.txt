@@ -1,8 +1,8 @@
 Un peu de lumière, chaque jour. ✨
 Un même verset partagé, un instant de calme — ensemble, partout dans le monde.
 
-Pourquoi VerseLight ?
-Dans un monde bruyant, VerseLight cultive le calme. Pas de fil infini. Pas d’abonnés, pas de messages privés. Juste un verset par jour, partagé par tous, pour réfléchir, respirer et recommencer. Lisez, enregistrez, emportez-le hors ligne.
+Pourquoi LumaVerse ?
+Dans un monde bruyant, LumaVerse cultive le calme. Pas de fil infini. Pas d’abonnés, pas de messages privés. Juste un verset par jour, partagé par tous, pour réfléchir, respirer et recommencer. Lisez, enregistrez, emportez-le hors ligne.
 
 ☀ UN VERSET, PARTAGÉ CHAQUE JOUR
 • Le même verset pour tous, chaque jour — un rythme commun
@@ -36,10 +36,10 @@ Dans un monde bruyant, VerseLight cultive le calme. Pas de fil infini. Pas d’a
 • Natif Kotlin + Jetpack Compose — rapide, moderne, beau, hors ligne
 
 — Contient des annonces —
-VerseLight est gratuit pour toujours sans achat intégré. Pour rester gratuit, nous affichons des annonces bannière et interstitielles via Google AdMob. Les annonces ne masquent jamais votre verset et les interstitiels sont rares et fermables. Dans l’EEE/RU, le consentement est demandé via UMP.
+LumaVerse est gratuit pour toujours sans achat intégré. Pour rester gratuit, nous affichons des annonces bannière et interstitielles via Google AdMob. Les annonces ne masquent jamais votre verset et les interstitiels sont rares et fermables. Dans l’EEE/RU, le consentement est demandé via UMP.
 
 Langues : anglais, espagnol (ES & 419), français (FR & CA), allemand, portugais (BR & PT), italien, japonais, coréen, arabe, chinois simplifié, néerlandais, hindi, indonésien, russe, turc, polonais et 40+ autres via traduction sur l’appareil.
 
 Conçu avec soin en encre #173a38, crème #f8f1e4 et or #b88746 — calme, chaleureux, premium.
 
-Un peu de lumière pour votre journée — commencez aujourd’hui. Téléchargez VerseLight gratuitement.
+Un peu de lumière pour votre journée — commencez aujourd’hui. Téléchargez LumaVerse gratuitement.

@@ -1,0 +1,14 @@
+{
+  "name": "LumaVerse — a little light, every day",
+  "short_name": "LumaVerse",
+  "description": "One beautiful Bible verse each day — offline, 60+ languages on-device, gracious community. Free on Google Play.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffbf4",
+  "theme_color": "#173a38",
+  "lang": "en",
+  "icons": [
+    {"src": "assets/icon-512.png","sizes": "512x512","type": "image/png","purpose": "any maskable"},
+    {"src": "icon.svg","sizes": "any","type": "image/svg+xml"}
+  ]
+}

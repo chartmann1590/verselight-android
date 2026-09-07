@@ -1,1 +1,1 @@
-VerseLight: Verset du Jour
+LumaVerse: Verset du Jour

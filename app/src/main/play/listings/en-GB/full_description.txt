@@ -1,8 +1,8 @@
 A little light, every day. ✨
 One shared Bible verse, one calm moment — together, worldwide.
 
-Why VerseLight?
-In a noisy world, VerseLight is quiet by design. No endless feed. No followers, no DMs. Just one carefully shared verse each day to reflect, breathe, and begin again. Read, save, and carry it offline — wherever you are.
+Why LumaVerse?
+In a noisy world, LumaVerse is quiet by design. No endless feed. No followers, no DMs. Just one carefully shared verse each day to reflect, breathe, and begin again. Read, save, and carry it offline — wherever you are.
 
 ☀ ONE VERSE, SHARED DAILY
 • The same verse for everyone, every day — a shared rhythm
@@ -36,10 +36,10 @@ In a noisy world, VerseLight is quiet by design. No endless feed. No followers, 
 • Native Kotlin + Jetpack Compose — fast, modern, beautiful, offline-capable
 
 — Contains ads —
-VerseLight is free for ever with no in-app purchases. To keep it free, we show banner and interstitial ads via Google AdMob. Ads never cover your verse and interstitials are infrequent and dismissible. If you are in the EEA/UK, consent is requested via UMP.
+LumaVerse is free for ever with no in-app purchases. To keep it free, we show banner and interstitial ads via Google AdMob. Ads never cover your verse and interstitials are infrequent and dismissible. If you are in the EEA/UK, consent is requested via UMP.
 
 Languages: English, Spanish (ES & 419), French (FR & CA), German, Portuguese (BR & PT), Italian, Japanese, Korean, Arabic, Chinese (Simplified), Dutch, Hindi, Indonesian, Russian, Turkish, Polish, Ukrainian, Thai, Vietnamese and 40+ more — all via on-device translation.
 
 Made with care in ink #173a38, cream #f8f1e4 and gold #b88746 — calm, warm, premium.
 
-A little light for your day — start today. Download VerseLight free.
+A little light for your day — start today. Download LumaVerse free.

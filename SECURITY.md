@@ -36,4 +36,4 @@ We aim to acknowledge within **48 hours** and publish a fix/advisory within **90
 
 We follow coordinated disclosure. Once a fix is released, we will publish a GitHub Security Advisory and credit the reporter (unless they prefer anonymity).
 
-Thank you for helping keep VerseLight safe.
+Thank you for helping keep LumaVerse safe.

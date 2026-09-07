@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Publish VerseLight to Play Internal track via Google Play Android Publisher API.
+Publish LumaVerse to Play Internal track via Google Play Android Publisher API.
 Requires: service account JSON path in env var PLAY_SERVICE_ACCOUNT_JSON or ./scripts/verselight-play-publisher.json
 Package: com.chartmann1590.verselight
 """
@@ -25,7 +25,7 @@ def find_aab():
 if __name__ == "__main__":
     key = find_key()
     aab = find_aab()
-    print(f"[VerseLight Publish] Package: {PKG}")
+    print(f"[LumaVerse Publish] Package: {PKG}")
     print(f"Key: {key or 'NOT FOUND - drop JSON at scripts/verselight-play-publisher.json or set PLAY_SERVICE_ACCOUNT_JSON'}")
     print(f"AAB: {aab or 'NOT FOUND - run ./gradlew bundleRelease first'}")
     if not key:

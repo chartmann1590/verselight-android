@@ -1,8 +1,8 @@
-# VerseLight on-device moderation model card
+# LumaVerse on-device moderation model card
 
 ## Purpose
 
-VerseLight uses two on-device layers before a public comment can be submitted:
+LumaVerse uses two on-device layers before a public comment can be submitted:
 
 1. An always-available compact linear classifier over normalized token and phrase features.
 2. A Gemini Nano classification prompt through Android AICore when the device reports that feature as available.

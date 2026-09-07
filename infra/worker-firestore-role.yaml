@@ -1,4 +1,4 @@
-title: VerseLight Worker Comment Moderator
+title: LumaVerse Worker Comment Moderator
 description: Legacy least-privilege permissions for comment moderation. Production uses roles/datastore.user because the Worker also creates comments and private activity records.
 stage: GA
 includedPermissions:

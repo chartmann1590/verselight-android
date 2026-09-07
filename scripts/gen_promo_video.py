@@ -18,7 +18,7 @@ def draw_frame(text1, text2, verse, ref, frame_num, bg="#f8f1e4"):
     
     # top bar
     d.rectangle([0,0,W,110], fill="#173a38")
-    d.text((60,28), "VERSELight", font=med, fill="white")
+    d.text((60,28), "LumaVerse", font=med, fill="white")
     d.text((W-120,32), "\u2600", font=med, fill="#b88746")
     
     # card centered
@@ -46,7 +46,7 @@ scenes = [
     ("Your private journey", "Likes & shares stay private", '"Be still, and know\nthat I am God"', "PSALM 46:10 \u00b7 WEB"),
     ("Gracious community", "Kind reflections, no noise", '"Love is patient,\nlove is kind"', "1 COR 13:4 \u00b7 WEB"),
     ("60+ languages, on-device", "ML Kit \u2022 ~30MB \u2022 Offline", '"La luz brilla en\nla oscuridad"', "JUAN 1:5 \u00b7 WEB"),
-    ("Carry the light", "Free \u2022 No in-app purchases", '"A little light,\nevery day"', "VERSELIGHT"),
+    ("Carry the light", "Free \u2022 No in-app purchases", '"A little light,\nevery day"', "LUMAVERSE"),
 ]
 
 fps = 30

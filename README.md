@@ -1,11 +1,15 @@
-# ☀ VerseLight — a little light, every day
+# ☀ LumaVerse — a little light, every day
 
 **One shared Bible verse, a gracious community, and your private spiritual journey — on Android.**
 
-VerseLight gives everyone the same beautiful verse each day from the public-domain **World English Bible**, space to share respectful reflections, and a private record of the words you carry. Free to use, supported by unobtrusive ads.
+LumaVerse gives everyone the same beautiful verse each day from the public-domain **World English Bible**, space to share respectful reflections, and a private record of the words you carry. Free to use, supported by unobtrusive ads.
 
-- **Get it on Google Play** — *Coming soon* (public beta link will appear at [verselight-daily-2026.web.app](https://verselight-daily-2026.web.app))
+[![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.chartmann1590.verselight)
+[![Buy Me A Coffee](https://img.shields.io/badge/%E2%98%95%20Buy%20me%20a%20beer-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/charleshartmann)
+
+- **Get it on Google Play:** https://play.google.com/store/apps/details?id=com.chartmann1590.verselight
 - **Website:** https://verselight-daily-2026.web.app
+- **Support the project:** https://buymeacoffee.com/charleshartmann — ☕ Buy me a beer
 
 ---
 
@@ -49,16 +53,18 @@ Have a question, idea, or issue?
 
 For private account-deletion help without the app, follow the link above. About the text: World English Bible is public domain — see [eBible.org](https://ebible.org/details.php?id=engwebp).
 
+If LumaVerse brightens your day, consider [buying me a beer](https://buymeacoffee.com/charleshartmann) ☕ — thank you!
+
 ---
 
 ## For the curious
 
-VerseLight is native Android (Kotlin + Jetpack Compose, Material 3) with Firebase Authentication & Firestore, Cloudflare Workers for moderation, and on-device safety + translation. It's open source under **Apache-2.0** — see [LICENSE](LICENSE). Scripture text remains public domain under its upstream terms.
+LumaVerse is native Android (Kotlin + Jetpack Compose, Material 3) with Firebase Authentication & Firestore, Cloudflare Workers for moderation, and on-device safety + translation. It's open source under **Apache-2.0** — see [LICENSE](LICENSE). Scripture text remains public domain under its upstream terms.
 
 Developer notes, moderation model card, and build instructions are in [`docs/`](docs/) and commit history.
 
 ---
 
-*VerseLight is not a crisis service. If someone is in immediate danger, contact local emergency services. In the US & Canada, call or text **988**.*
+*LumaVerse is not a crisis service. If someone is in immediate danger, contact local emergency services. In the US & Canada, call or text **988**.*
 
-A little light, every day. — *Charles Hartmann*
+A little light, every day. — *Charles Hartmann* · [buymeacoffee.com/charleshartmann](https://buymeacoffee.com/charleshartmann)

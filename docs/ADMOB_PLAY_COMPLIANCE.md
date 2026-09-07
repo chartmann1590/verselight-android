@@ -1,4 +1,4 @@
-# AdMob & Play Store Compliance — VerseLight
+# AdMob & Play Store Compliance — LumaVerse
 
 ## What was implemented
 
@@ -21,7 +21,7 @@
 
 ### 3. Banner Ads
 - `ads/BannerAd.kt`: adaptive anchored banner (`AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize`) via `AndroidView` `AdView`. Only loads if `canRequestAds`.
-- Integrated in `VerseLightRoot` Scaffold `bottomBar` above `NavigationBar` (does not overlap content, stays above navigationBarsPadding). Policy-compliant: not overlapping interactive elements.
+- Integrated in `LumaVerseRoot` Scaffold `bottomBar` above `NavigationBar` (does not overlap content, stays above navigationBarsPadding). Policy-compliant: not overlapping interactive elements.
 
 ### 4. Interstitial Ads
 - `ads/AdMobManager.kt`: preloads interstitial on app start after consent, 2-minute `COOLDOWN_MS` frequency cap, `isLoading` guard, `FullScreenContentCallback` auto-reloads next ad on dismiss/failure.

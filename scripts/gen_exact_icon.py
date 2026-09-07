@@ -124,8 +124,8 @@ try:
     sf = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 20)
 except:
     tf=sf=ImageFont.load_default()
-d2.text((48,70), "VERSE", font=tf, fill="#1E3B3A")
-d2.text((210,70), "Light", font=tf, fill="#B68B47")
+d2.text((48,70), "LUMA", font=tf, fill="#1E3B3A")
+d2.text((200,70), "Verse", font=tf, fill="#B68B47")
 d2.text((48,145), "A little light, every day.", font=sf, fill="#1E3B3A")
 fg.save("H:/bible-verse-app/store-feature-graphic-1024x500-exact.png", "PNG")
 print("Feature graphic exact saved")
