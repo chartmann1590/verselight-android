@@ -1,0 +1,36 @@
+name: Hosting
+
+# Deploy the marketing/support website (website/) to Firebase Hosting
+# (https://verselight-daily-2026.web.app) whenever it changes, so the
+# "Latest release" panel and download links always match the repo.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - 'firebase.json'
+      - '.firebaserc'
+      - '.github/workflows/hosting.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: hosting-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: verselight-daily-2026
+          channelId: live
