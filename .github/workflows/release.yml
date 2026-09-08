@@ -43,15 +43,19 @@ jobs:
       # required — the job fails loudly without them so we never ship a
       # debug APK disguised as a release.
       - name: Restore release keystore
-        if: secrets.ANDROID_KEYSTORE_BASE64 != ''
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        if: env.KEYSTORE_B64 != ''
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > app/upload-keystore.jks
+          echo "$KEYSTORE_B64" | base64 -d > app/upload-keystore.jks
           echo "Keystore restored."
 
       - name: Restore google-services.json
-        if: secrets.GOOGLE_SERVICES_JSON_BASE64 != ''
+        env:
+          SERVICES_B64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        if: env.SERVICES_B64 != ''
         run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > app/google-services.json
+          echo "$SERVICES_B64" | base64 -d > app/google-services.json
           echo "google-services.json restored."
 
       - name: Verify signing files present
