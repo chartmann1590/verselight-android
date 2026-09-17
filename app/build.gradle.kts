@@ -60,8 +60,8 @@ android {
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2026.02.00"))
-    androidTestImplementation(platform("androidx.compose:compose-bom:2026.02.00"))
+    implementation(platform("androidx.compose:compose-bom:2026.09.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2026.09.00"))
 
     implementation("androidx.activity:activity-compose:1.13.0")
     implementation("androidx.compose.material3:material3")
