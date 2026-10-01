@@ -74,7 +74,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.10.1")
     implementation("androidx.datastore:datastore-preferences:1.2.1")
     implementation("androidx.graphics:graphics-path:1.1.0")
-    implementation("androidx.work:work-runtime-ktx:2.11.1")
+    implementation("androidx.work:work-runtime-ktx:2.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.11.0")
     implementation("io.coil-kt.coil3:coil-compose:3.6.3")
 
