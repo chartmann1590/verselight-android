@@ -1,0 +1,40 @@
+launch
+wait 20
+shot 01-launch
+scrollto (?i)^choose my language$
+tap (?i)^choose my language$
+wait 3
+shot 02-language
+scrollto (?i)^continue in english$
+tap (?i)^continue in english$
+wait 5
+shot 03-account-choice
+scrollto (?i)^continue as guest$
+tap (?i)^continue as guest$
+wait 8
+adclose
+shot 04-today
+tap (?i)^community$
+wait 5
+adclose
+shot 05-community
+tap (?i)^my journey$
+wait 4
+adclose
+shot 06-journey
+tap (?i)^profile$
+wait 4
+adclose
+shot 07-profile
+swipeup
+swipeup
+shot 08-profile-bottom
+tap (?i)^today$
+wait 3
+adclose
+tap (?i)^sign in|like
+wait 3
+shot 09-signin-dialog
+back
+wait 2
+shot 10-back-today

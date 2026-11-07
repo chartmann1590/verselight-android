@@ -343,7 +343,8 @@ private fun OnboardingScreen(
                             OutlinedTextField(email, { email = it }, label = { LText("Email") }, singleLine = true, modifier = Modifier.fillMaxWidth())
                             OutlinedTextField(password, { password = it }, label = { LText("Password") }, singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
                             Button(onClick = { onEmail(email, password, register, name) }, enabled = !busy && email.contains('@') && password.length >= 6 && (!register || name.isNotBlank()), modifier = Modifier.fillMaxWidth()) { LText(if (register) "Create account" else "Sign in") }
-                            OutlinedButton(onClick = onGoogle, enabled = !busy, modifier = Modifier.fillMaxWidth()) { LText("Continue with Google") }
+                            // Amazon (Fire) build: Google sign-in needs Google Play services, so only email sign-in is offered.
+                            if (com.chartmann1590.verselight.BuildConfig.STORE != "amazon") OutlinedButton(onClick = onGoogle, enabled = !busy, modifier = Modifier.fillMaxWidth()) { LText("Continue with Google") }
                             TextButton(onClick = { register = !register }, modifier = Modifier.fillMaxWidth()) { LText(if (register) "I already have an account" else "Create an email account") }
                         } }
                     }
@@ -603,7 +604,8 @@ private fun AuthDialog(busy: Boolean, onDismiss: () -> Unit, onEmail: (String, S
         OutlinedTextField(email, { email = it }, label = { LText("Email") }, singleLine = true)
         OutlinedTextField(password, { password = it }, label = { LText("Password") }, singleLine = true, visualTransformation = PasswordVisualTransformation())
         Button(onClick = { onEmail(email, password, register, name) }, enabled = !busy && email.contains('@') && password.length >= 6 && (!register || name.isNotBlank()), modifier = Modifier.fillMaxWidth()) { LText(if (register) "Create account" else "Sign in") }
-        OutlinedButton(onClick = onGoogle, enabled = !busy, modifier = Modifier.fillMaxWidth()) { LText("Continue with Google") }
+        // Amazon (Fire) build: Google sign-in needs Google Play services, so only email sign-in is offered.
+                            if (com.chartmann1590.verselight.BuildConfig.STORE != "amazon") OutlinedButton(onClick = onGoogle, enabled = !busy, modifier = Modifier.fillMaxWidth()) { LText("Continue with Google") }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { TextButton(onClick = { register = !register }) { LText(if (register) "I have an account" else "Create account") }; if (!register) TextButton(onClick = { if (email.contains('@')) onReset(email) }) { LText("Reset password") } }
     } }, confirmButton = {}, dismissButton = { TextButton(onClick = onDismiss) { LText("Not now") } })
 }
